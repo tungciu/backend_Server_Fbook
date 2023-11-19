@@ -10,6 +10,8 @@ var usersRouter = require('./routes/users');
 var AdminRouter = require('./routes/Admin.router');
 var UsersRouter = require('./routes/User.router');
 var BooksRouter = require('./routes/Book.router');
+var CartRouter = require('./routes/Cart.router');
+var BillRouter = require('./routes/Bill.router');
 var app = express();
 // app.use('/uploads', express.static('public/uploads'));
 // view engine setup
@@ -29,6 +31,8 @@ app.use('/users', usersRouter);
 app.use('/admin',AdminRouter);
 app.use('/user',UsersRouter);
 app.use('/book',BooksRouter);
+app.use('/cart',CartRouter);
+app.use('/bill',BillRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

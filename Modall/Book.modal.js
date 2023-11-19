@@ -139,20 +139,4 @@ Book.search = function (keyword, result) {
         }
     });
 };
-//
-// Book.search = function (keyword, result) {
-//     if (db.state === 'disconnected') {
-//         db.connect();
-//     }
-//     const query = "SELECT * FROM Book WHERE BookName LIKE ? OR Author = ?";
-//     const searchKeyword = `%${keyword}%`;
-//     db.query(query, [searchKeyword, keyword], function (err, Books) {
-//         if (err) {
-//             result(null);
-//         } else {
-//             result(Books);
-//         }
-//     });
-// }
-
 module.exports = Book;
