@@ -34,3 +34,10 @@ http://localhost:5000/bill/search/id
 ----------------Cart----------------
 http://localhost:5000/cart/get_list
 http://localhost:5000/cart/delete/id
+
+----------------Login----------------
+http://localhost:5000/acount/login
+PassWord và Email
+http://localhost:5000/acount/login
+
+http://localhost:5000/acount/check_token
