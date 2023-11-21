@@ -4,7 +4,7 @@ var path = require('path');
 var cors = require("cors");
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+const _Authermiddalwera = require("./Connect/_AutherMiddalwera");
 var Category = require('./routes/Category');
 var usersRouter = require('./routes/users');
 var AdminRouter = require('./routes/Admin.router');
@@ -12,20 +12,28 @@ var UsersRouter = require('./routes/User.router');
 var BooksRouter = require('./routes/Book.router');
 var CartRouter = require('./routes/Cart.router');
 var BillRouter = require('./routes/Bill.router');
+var AcountRouter = require('./routes/login.router');
 var app = express();
 // app.use('/uploads', express.static('public/uploads'));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 // Cấu hình cors
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors());
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+// app.use(function (req,r,next){
+//   res.header("Access-Control-Allow-Origin","*");
+//   res.header("Access-Control-Allow-Headers","Origin,X-Requested-With,Content-Type,Accept");
+//   res.header("Access-Control-Allow-Methods","GET,POST,PUT,DELETE");
+//   next();
+// });
+app.use('/acount', AcountRouter);
+app.use(_Authermiddalwera.isAuth);// check token
 app.use('/Category', Category);
 app.use('/users', usersRouter);
 app.use('/admin',AdminRouter);
@@ -48,5 +56,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
 
 module.exports = app;

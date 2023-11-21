@@ -1,5 +1,7 @@
 const db=require("../Connect/Conectdb");
 const bcrypt = require('bcrypt');
+
+
 const Users=function(Users){
     this.IDUser=Users.IDUser;
     this.UserName=Users.UserName;
@@ -97,4 +99,42 @@ Users.search = function (keyword, result) {
         }
     });
 }
+
+Users.chekc_login = function (data, result) {
+    if (db.state === 'disconnected') {
+        db.connect();
+    }
+    db.query(
+        "SELECT * FROM Users WHERE Email = ? AND PassWord = ? ",
+        [data.Email, data.PassWord],
+        function (err, Users) {
+            if (err || Users.length == 0) {
+                result(null);
+            } else {
+                result(Users[0]);
+            }
+        }
+    );
+};
+// Users.checkLogin = function ({ Email, PassWord }) {
+//     return new Promise((resolve, reject) => {
+//             if (db.state === 'disconnected') {
+//         db.connect();
+//     }
+//         db.query(
+//             "SELECT * FROM Users WHERE Email = ? AND PassWord = ?",
+//             [Email, PassWord],
+//             (err, users) => {
+//                 if (err) {
+//                     reject(err);
+//                 } else {
+//                     resolve(users.length > 0 ? users[0] : null);
+//                 }
+//             }
+//         );
+//     });
+// };
+
+
+
 module.exports=Users;

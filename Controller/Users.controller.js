@@ -1,6 +1,6 @@
 var Users=require('../Modall/User.modal');
 var bcrypt = require('bcrypt');
-
+var JWT = require("../Connect/_JWT");
 exports.get_list=function(req,res){
     Users.get_all(function(data){
         res.send({result:data});
@@ -46,3 +46,15 @@ exports.add_Users = function (req, res) {
         }
     });
 }
+
+exports.login = function (req, res) {
+    var data = req.body;
+    Users.chekc_login(data, async function (respnse) {
+        if (respnse) {
+            const _token = await JWT.make(respnse);
+            res.send({ result: _token, status: true });
+        } else {
+            res.send({ result: "", status: false });
+        }
+    });
+};
