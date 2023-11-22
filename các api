@@ -41,3 +41,8 @@ PassWord và Email
 http://localhost:5000/acount/login
 
 http://localhost:5000/acount/check_token
+
+..............thong ke----------
+http://localhost:5000/bill/bydate/statdate/endate
+ví dụ
+http://localhost:5000/bill/bydate/2023-11-13/2023-11-23

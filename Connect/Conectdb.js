@@ -3,9 +3,9 @@ var mysql = require("mysql2");
 var pool = mysql.createPool({
     connectionLimit: 10,
     host: "sql.freedb.tech",
-    user: "freedb_tung23",
-    password: "r!nkrDSan&d#9HA",
-    database: "freedb_fbook",
+    user: "freedb_mtung",
+    password: "tAUc4!Zr2YtbqF*",
+    database: "freedb_fobook",
     connectTimeout: 20000,
 });
 
