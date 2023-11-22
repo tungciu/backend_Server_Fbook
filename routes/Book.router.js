@@ -46,16 +46,18 @@ router.post('/add', function(req, res, next) {
     // Lấy dữ liệu từ request body
     var newData = req.body;
 
+    // Thêm thời gian hiện tại vào newData.Create_at
+    newData.Create_at = new Date();
+
     Books.create(newData, function(result) {
         if (result) {
-            image = req.body.image;
             res.send({ result: result });
-
         } else {
-            res.status(500).send({ error: "Error creating new Category." });
+            res.status(500).send({ error: "Error creating new Book." });
         }
     });
 });
+
 // api xóa
 router.delete('/delete/:id', function(req, res, next) {
     const id = req.params.id;

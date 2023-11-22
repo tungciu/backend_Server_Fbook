@@ -46,3 +46,10 @@ http://localhost:5000/acount/check_token
 http://localhost:5000/bill/bydate/statdate/endate
 ví dụ
 http://localhost:5000/bill/bydate/2023-11-13/2023-11-23
+
+..............Favorite----------
+
+http://localhost:5000/Favorite/get_list
+http://localhost:5000/Favorite/add
+http://localhost:5000/Favorite/delete/id
+

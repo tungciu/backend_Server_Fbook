@@ -8,8 +8,9 @@ const Book = function (Book) {
     this.PriceBook = Book.PriceBook;
     this.Discription = Book.Discription;
     this.ImageBook = Book.ImageBook;
-    this.Status = Book.Status;
+    this.Create_at = Book.Create_at;
     this.Chapter = Book.Chapter;
+    this.isFavourite=Book.isFavourite;
     this.IDCat = Book.IDCat;
 
 
@@ -79,18 +80,21 @@ Book.create = function (data, result) {
     }
     db.query("INSERT INTO Book SET ?", data, function (err, Book) {
         if (err) {
+            console.error("Lỗi khi chèn dữ liệu vào bảng Book:", err);
             result(null);
         } else {
             result({ IDBook: Book.insertId, ...data });
         }
     });
 };
+
+
 Book.update = function (array, result) {
     if (db.state === 'disconnected') {
         db.connect();
     }
     db.query(
-        "UPDATE Book SET BookName=?,Author=?,PublishYear=?,PriceBook=?,Discription=?,ImageBook=?,IDCat=?,Chapter=?,Status=? WHERE IDBook=?",
+        "UPDATE Book SET BookName=?,Author=?,PublishYear=?,PriceBook=?,Discription=?,ImageBook=?,IDCat=?,Chapter=?,Create_at=? ,isFavourite=? WHERE IDBook=?",
         [
             array.BookName,
             array.Author,
@@ -99,12 +103,14 @@ Book.update = function (array, result) {
             array.Discription,
             array.ImageBook,
             array.IDCat,
-            array.Status,
             array.Chapter,
+            array.Create_at,  // Hãy đảm bảo rằng đây là timestamp hoặc datetime hợp lệ
+            array.isFavourite,
             array.IDBook,
         ],
         function (err, updateResult) {
             if (err) {
+                console.error("Lỗi khi cập nhật Sách:", err);
                 result(null);
             } else {
                 result(array);
