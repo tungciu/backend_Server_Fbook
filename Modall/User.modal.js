@@ -100,40 +100,49 @@ Users.search = function (keyword, result) {
     });
 }
 
+// Users.chekc_login = function (data, result) {
+//     if (db.state === 'disconnected') {
+//         db.connect();
+//     }
+//     db.query(
+//         "SELECT * FROM Users WHERE Email = ? AND PassWord = ? ",
+//         [data.Email, data.PassWord],
+//         function (err, Users) {
+//             if (err || Users.length == 0) {
+//                 result(null);
+//             } else {
+//                 result(Users[0]);
+//             }
+//         }
+//     );
+// };
+
 Users.chekc_login = function (data, result) {
     if (db.state === 'disconnected') {
         db.connect();
     }
+
+    // Sử dụng prepared statement để tránh SQL injection
     db.query(
-        "SELECT * FROM Users WHERE Email = ? AND PassWord = ? ",
-        [data.Email, data.PassWord],
+        "SELECT * FROM Users WHERE Email = ?",
+        [data.Email],
         function (err, Users) {
-            if (err || Users.length == 0) {
+            if (err) {
+                console.error('Error during login query:', err);
                 result(null);
             } else {
-                result(Users[0]);
+                if (Users.length === 0) {
+                    // Không tìm thấy người dùng
+                    result(null);
+                } else {
+                    // So sánh mật khẩu (đã được băm)
+                    const hashedPasswordFromDB = Users[0].PassWord;
+                    result(Users[0]);
+                }
             }
         }
     );
 };
-// Users.checkLogin = function ({ Email, PassWord }) {
-//     return new Promise((resolve, reject) => {
-//             if (db.state === 'disconnected') {
-//         db.connect();
-//     }
-//         db.query(
-//             "SELECT * FROM Users WHERE Email = ? AND PassWord = ?",
-//             [Email, PassWord],
-//             (err, users) => {
-//                 if (err) {
-//                     reject(err);
-//                 } else {
-//                     resolve(users.length > 0 ? users[0] : null);
-//                 }
-//             }
-//         );
-//     });
-// };
 
 
 

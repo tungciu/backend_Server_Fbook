@@ -47,14 +47,36 @@ exports.add_Users = function (req, res) {
     });
 }
 
+// exports.login = function (req, res) {
+//     var data = req.body;
+//     Users.chekc_login(data, async function (respnse) {
+//         if (respnse) {
+//             const _token = await JWT.make(respnse);
+//             res.send({ result: _token, status: true });
+//         } else {
+//             res.send({ result: "", status: false });
+//         }
+//     });
+// };
+
 exports.login = function (req, res) {
     var data = req.body;
-    Users.chekc_login(data, async function (respnse) {
-        if (respnse) {
-            const _token = await JWT.make(respnse);
-            res.send({ result: _token, status: true });
+    Users.chekc_login(data, async function (user) {
+        if (user) {
+            // So sánh mật khẩu đã nhập với mật khẩu đã mã hóa trong cơ sở dữ liệu
+            bcrypt.compare(data.PassWord, user.PassWord, async function (err, result) {
+                if (result) {
+                    // Mật khẩu chính xác, tạo token và gửi về client
+                    const _token = await JWT.make(user);
+                    res.send({ result: _token, status: true });
+                } else {
+                    // Mật khẩu không chính xác
+                    res.send({ result: "mk k chinh xac", status: false });
+                }
+            });
         } else {
-            res.send({ result: "", status: false });
+            // Người dùng không tồn tại
+            res.send({ result: "k tồn tại", status: false });
         }
     });
 };
