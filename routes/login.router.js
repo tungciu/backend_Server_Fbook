@@ -2,7 +2,11 @@ var express = require('express');
 var router = express.Router();
 var UsersController = require("../Controller/Users.controller");
 const Usernmodal = require("../Modall/User.modal");
+var Admincontroler = require("../Controller/Admin.controller");
+const Adminmodal = require("../Modall/Admin.modal");
 var JWT = require("../Connect/_JWT");
+
+
 router.post("/login", UsersController.login);
 
 router.get("/check_token", async function (req, res) {
@@ -30,5 +34,10 @@ router.post('/add', function(req, res, next) {
         }
     });
 });
+// admin
+
+
+
+router.post("/login_admin", Admincontroler.login);
 
 module.exports = router;

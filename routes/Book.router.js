@@ -3,7 +3,6 @@ var router = express.Router();
 const multer = require('multer');
 var Books = require("../Modall/Book.modal");
 
-
 //
 // // Sử dụng multer để xử lý tải lên ảnh
 const storage = multer.memoryStorage();

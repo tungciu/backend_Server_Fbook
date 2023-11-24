@@ -1,6 +1,6 @@
 var Admin = require('../Modall/Admin.modal')
 var bcrypt = require('bcrypt');
-const Category = require("../Modall/Category.modal");
+var JWT = require("../Connect/_JWT");
 
 exports.get_list=function(req,res){
     Admin.get_all(function(data){
@@ -47,4 +47,27 @@ exports.add_Admin = function (req, res) {
         }
     });
 }
+
+
+exports.login = function (req, res) {
+    var data = req.body;
+    Admin.chekc_login(data, async function (Admin) {
+        if (Admin) {
+            // So sánh mật khẩu đã nhập với mật khẩu đã mã hóa trong cơ sở dữ liệu
+            bcrypt.compare(data.PassWord, Admin.PassWord, async function (err, result) {
+                if (result) {
+                    // Mật khẩu chính xác, tạo token và gửi về client
+                    const _token = await JWT.make(Admin);
+                    res.send({ result: _token, status: true });
+                } else {
+                    // Mật khẩu không chính xác
+                    res.send({ result: "mk k chinh xac", status: false });
+                }
+            });
+        } else {
+            // Người dùng không tồn tại
+            res.send({ result: "không tồn tại", status: false });
+        }
+    });
+};
 

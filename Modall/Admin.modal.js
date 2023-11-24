@@ -65,19 +65,6 @@ Admin.create = function (data, result) {
         }
     });
 }
-// Admin.create=function(data,result){
-//     if (db.state === 'disconnected') {
-//         db.connect();
-//     }
-//     db.query("INSERT INTO Admin SET ?", data,function(err,Admin){
-//         if(err){
-//             result(null);
-//         }
-//         else{
-//             result({IDAdmin: Admin.insertId, ...data});
-//         }
-//     });
-// }
 Admin.update=function(array,result){
     if (db.state === 'disconnected') {
         db.connect();
@@ -92,4 +79,32 @@ Admin.update=function(array,result){
         }
     });
 }
+
+Admin.chekc_login = function (data, result) {
+    if (db.state === 'disconnected') {
+        db.connect();
+    }
+
+    // Sử dụng prepared statement để tránh SQL injection
+    db.query(
+        "SELECT * FROM Admin WHERE Email = ?",
+        [data.Email],
+        function (err, Admins) {
+            if (err) {
+                console.error('Error during login query:', err);
+                result(null);
+            } else {
+                if (Admins.length === 0) {
+                    // Không tìm admin
+
+                    result(null);
+                } else {
+                    // So sánh mật khẩu (đã được băm)
+                    const hashedPasswordFromDB = Admins[0].PassWord;
+                    result(Admins[0]);
+                }
+            }
+        }
+    );
+};
 module.exports=Admin;

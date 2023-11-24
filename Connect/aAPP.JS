@@ -1,7 +1,7 @@
 // aAPP.js
 
 const ACCESS_TOKEN = "BHJBHJSBJBBKJBBBSVBDHGHGYY";
-const TOKEN_TIME_LIFE = "3h";
+const TOKEN_TIME_LIFE = "1h";
 
 module.exports = {
     ACCESS_TOKEN: ACCESS_TOKEN,

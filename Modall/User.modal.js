@@ -99,24 +99,6 @@ Users.search = function (keyword, result) {
         }
     });
 }
-
-// Users.chekc_login = function (data, result) {
-//     if (db.state === 'disconnected') {
-//         db.connect();
-//     }
-//     db.query(
-//         "SELECT * FROM Users WHERE Email = ? AND PassWord = ? ",
-//         [data.Email, data.PassWord],
-//         function (err, Users) {
-//             if (err || Users.length == 0) {
-//                 result(null);
-//             } else {
-//                 result(Users[0]);
-//             }
-//         }
-//     );
-// };
-
 Users.chekc_login = function (data, result) {
     if (db.state === 'disconnected') {
         db.connect();

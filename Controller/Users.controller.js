@@ -47,18 +47,6 @@ exports.add_Users = function (req, res) {
     });
 }
 
-// exports.login = function (req, res) {
-//     var data = req.body;
-//     Users.chekc_login(data, async function (respnse) {
-//         if (respnse) {
-//             const _token = await JWT.make(respnse);
-//             res.send({ result: _token, status: true });
-//         } else {
-//             res.send({ result: "", status: false });
-//         }
-//     });
-// };
-
 exports.login = function (req, res) {
     var data = req.body;
     Users.chekc_login(data, async function (user) {
@@ -76,7 +64,7 @@ exports.login = function (req, res) {
             });
         } else {
             // Người dùng không tồn tại
-            res.send({ result: "k tồn tại", status: false });
+            res.send({ result: "không tồn tại", status: false });
         }
     });
 };
