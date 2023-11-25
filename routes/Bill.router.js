@@ -70,19 +70,7 @@ router.get('/search/:keyword', function(req, res, next) {
         }
     });
 });
-// api thống kê
-// router.get('/bydate/:startDate/:endDate', function(req, res, next) {
-//     const startDate = req.params.startDate;
-//     const endDate = req.params.endDate;
-//
-//     Billnmodal.getTotalByDateRange(startDate, endDate, function(result) {
-//         if (result === null) {
-//             res.status(404).send('Không có dữ liệu thống kê cho khoảng thời gian này');
-//         } else {
-//             res.json({ total: result });
-//         }
-//     });
-// });
+
 
 router.get('/bydate/:startDate/:endDate', function(req, res, next) {
     const startDate = req.params.startDate;

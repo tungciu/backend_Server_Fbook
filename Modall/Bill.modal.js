@@ -13,14 +13,22 @@ Bill.get_all = function (result) {
     if (db.state === 'disconnected') {
         db.connect();
     }
-    db.query("SELECT * FROM Bill", function (err, Bill) {
+
+    const query = `
+        SELECT Bill.*, Book.BookName, Users.UserName
+        FROM Bill
+        LEFT JOIN Book ON Bill.IDBook = Book.IDBook
+        LEFT JOIN Users ON Bill.IDUser = Users.IDUser
+    `;
+
+    db.query(query, function (err, billlWithCategories) {
         if (err) {
             result(null);
         } else {
-            result(Bill);
+            result(billlWithCategories);
         }
     });
-}
+};
 
 Bill.getByid = function (id, result) {
     if (db.state === 'disconnected') {
@@ -47,22 +55,25 @@ Bill.remove = function (id, result) {
         }
     });
 }
-
 Bill.search = function (keyword, result) {
     if (db.state === 'disconnected') {
         db.connect();
     }
 
     const query = `
-        SELECT * FROM Bill
+        SELECT Bill.*, Book.BookName, Users.UserName
+        FROM Bill
+        LEFT JOIN Book ON Bill.IDBook = Book.IDBook
+        LEFT JOIN Users ON Bill.IDUser = Users.IDUser
         WHERE 
-            IDBook LIKE ? or
-            status LIKE ?;
+            Book.BookName LIKE ? OR
+            Bill.status LIKE ? OR
+            Bill.PriceTotal LIKE ?;
     `;
 
     const searchKeyword = `%${keyword}%`;
 
-    db.query(query, [searchKeyword, searchKeyword], function (err, Bills) {
+    db.query(query, [searchKeyword, searchKeyword, searchKeyword], function (err, Bills) {
         if (err) {
             result(null);
         } else {
@@ -70,6 +81,30 @@ Bill.search = function (keyword, result) {
         }
     });
 };
+
+// Bill.search = function (keyword, result) {
+//     if (db.state === 'disconnected') {
+//         db.connect();
+//     }
+//
+//     const query = `
+//         SELECT * FROM Bill
+//         WHERE
+//             IDBook LIKE ? or
+//             status LIKE ? or
+//             PriceTotal LIKE ?;
+//     `;
+//
+//     const searchKeyword = `%${keyword}%`;
+//
+//     db.query(query, [searchKeyword, searchKeyword,searchKeyword], function (err, Bills) {
+//         if (err) {
+//             result(null);
+//         } else {
+//             result(Bills);
+//         }
+//     });
+// };
 Bill.create = function (data, result) {
     if (db.state === 'disconnected') {
         db.connect();
