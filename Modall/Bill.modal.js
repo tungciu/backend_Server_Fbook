@@ -127,8 +127,11 @@ Bill.getTotalByDateRange = function (startDate, endDate, result) {
     }
 
     const query = `
-        SELECT SUM(PriceTotal) AS total FROM Bill
-        WHERE 
+        SELECT 
+            SUM(PriceTotal) AS total,
+            COUNT(*) AS totalOrders
+        FROM Bill
+        WHERE
             Status = 'Paid' AND
             Create_at BETWEEN ? AND ?;
     `;
@@ -137,10 +140,15 @@ Bill.getTotalByDateRange = function (startDate, endDate, result) {
         if (err) {
             result(null);
         } else {
-            result(total[0].total || 0);
+            result({
+                total: total[0].total || 0,
+                totalOrders: total[0].totalOrders || 0
+            });
+
         }
     });
 };
+
 // Thêm vào đối tượng Bill theo tháng
 Bill.getTotalByMonth = function (year, month, result) {
     if (db.state === 'disconnected') {

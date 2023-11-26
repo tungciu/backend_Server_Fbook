@@ -39,8 +39,10 @@ http://localhost:5000/cart/delete/id
 http://localhost:5000/acount/login
 PassWord và Email
 http://localhost:5000/acount/login
-
+check token
 http://localhost:5000/acount/check_token
+đăng ký
+http://localhost:5000/acount/add
 
 ..............thong ke----------
 http://localhost:5000/bill/bydate/statdate/endate
