@@ -24,20 +24,37 @@ router.get("/check_token", async function (req, res) {
         res.send({ data: "Mã token không hợp lệ" });
     }
 });
-router.post('/add', function(req, res, next) {
-    const data = req.body; // Dữ liệu từ phần thân yêu cầu
-    Usernmodal.create(data, function(result) {
+router.post('/add', function (req, res, next) {
+    const userData = req.body;
+    console.log('Dữ liệu người dùng từ yêu cầu:', userData);
+
+    Usernmodal.create(userData, function (result) {
         if (result === null) {
+            console.error('Lỗi máy chủ nội bộ');
             res.status(500).send('Lỗi máy chủ nội bộ');
         } else {
             res.json(result);
         }
     });
 });
+
 // admin
 
 
 
 router.post("/login_admin", Admincontroler.login);
+//verifyOTP
+// Trong file router.js hoặc tương tự
+router.post('/verify_otp', function (req, res, next) {
+    const userData = req.body;
+
+    Usernmodal.verifyOTP(userData, function (isVerified) {
+        if (isVerified) {
+            res.json({ message: 'Xác nhận OTP thành công' });
+        } else {
+            res.status(400).json({ message: 'Xác nhận OTP thất bại' });
+        }
+    });
+});
 
 module.exports = router;

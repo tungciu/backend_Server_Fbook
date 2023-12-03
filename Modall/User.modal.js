@@ -10,6 +10,7 @@ const Users=function(Users){
     this.Email=Users.Email;
     this.Birthday=Users.Birthday;
     this.Phone=Users.Phone;
+    this.otp=Users.otp;
 }
 
 Users.get_all=function(result){
@@ -73,47 +74,70 @@ Users.remove = function (id, result) {
 //     });
 // }
 
-Users.create = function (data, result) {
-    const generatedOTP = otpGenerator.generate(6, { digits: true, alphabets: false, upperCase: false, specialChars: false });
 
+// Hàm sinh OTP
+const generateOTP = () => {
+    return otpGenerator.generate(6, { upperCase: false, specialChars: false, alphabets: false });
+};
+// Hàm gửi OTP qua SMS sử dụng Twilio
+const sendOTP = (phone, otp) => {
+    const accountSid = 'AC57808ac8b6514d5523761d451df13af4';
+    const authToken = '583137acf688002a4bc776d46bcc0e83';
+    const twilioPhone = "+12625814573";  // Thay thế bằng số điện thoại Twilio đã xác nhận của bạn
+
+    const client = new twilio(accountSid, authToken);
+
+    return client.messages.create({
+        body: `Mã OTP của bạn là: ${otp}`,
+        from: twilioPhone,
+        to: phone
+    });
+};
+
+Users.create = function (data, result) {
     bcrypt.hash(data.PassWord, 10, function (err, hashedPassword) {
         if (err) {
+            console.error('Lỗi khi băm mật khẩu:', err);
             result(null);
         } else {
             data.PassWord = hashedPassword;
 
-            // Lưu mã OTP trong cơ sở dữ liệu hoặc bộ lưu trữ tạm thời (như Redis) để xác minh sau này.
+            // Sinh và lưu OTP vào cơ sở dữ liệu
+            const otp = generateOTP();
+            data.otp = otp;
+
+            console.log('Dữ liệu trước khi thêm vào cơ sở dữ liệu:', data);
 
             db.query("INSERT INTO Users SET ?", data, function (err, Users) {
                 if (err) {
+                    console.error('Lỗi khi thêm người dùng vào cơ sở dữ liệu:', err);
                     result(null);
                 } else {
-                    result({ IDUser: Users.insertId, ...data });
-
-                    // Gửi mã OTP đến số điện thoại người dùng bằng Twilio
-                    sendOTPToUser(data.Phone, generatedOTP);
+                    // Gửi OTP đến điện thoại người dùng
+                    sendOTP(data.Phone, otp)
+                        .then(() => {
+                            result({ IDUser: Users.insertId, ...data });
+                        })
+                        .catch((error) => {
+                            console.error('Lỗi khi gửi OTP:', error);
+                            result(null);
+                        });
                 }
             });
         }
     });
 };
 
-
-// Thêm hàm gửi mã OTP đến số điện thoại người dùng bằng Twilio
-function sendOTPToUser(phone, otp) {
-    const twilioClient = new twilio('YOUR_TWILIO_ACCOUNT_SID', 'YOUR_TWILIO_AUTH_TOKEN');
-
-    twilioClient.messages.create({
-        body: `Mã OTP của bạn là: ${otp}`,
-        to: `+${phone}`, // Số điện thoại người dùng, Twilio yêu cầu định dạng số điện thoại "+123456789"
-        from: 'YOUR_TWILIO_PHONE_NUMBER'
-    }).then(message => {
-        console.log(message.sid);
-    }).catch(error => {
-        console.error(error);
+// Hàm xác nhận OTP trong quá trình đăng ký
+Users.verifyOTP = function (data, result) {
+    db.query("SELECT * FROM Users WHERE Phone = ? AND otp = ?", [data.Phone, data.otp], function (err, Users) {
+        if (err || Users.length === 0) {
+            result(false); // Xác nhận OTP thất bại
+        } else {
+            result(true); // Xác nhận OTP thành công
+        }
     });
-}
-
+};
 Users.update=function(array,result){
     if (db.state === 'disconnected') {
         db.connect();
@@ -169,6 +193,4 @@ Users.chekc_login = function (data, result) {
     );
 };
 
-
-
-module.exports=Users;
+module.exports = Users;

@@ -43,7 +43,21 @@ check token
 http://localhost:5000/acount/check_token
 đăng ký
 http://localhost:5000/acount/add
-
+ví dụ:
+  "UserName": "tung otp",
+  "PassWord": "pasưsword123",
+  "Email": "johưn.doe@example.com",
+  "Birthday": "1990-01-01",
+  "Phone": "+84346967563"
+// xac nhạn otp
+http://localhost:5000/acount/verify_otp
+ví dụ:
+ "Phone": "+84376534195",
+  "otp": "CVVQuK"
+Trả về
+{
+    "message": "Xác nhận OTP thành công"
+}
 ..............thong ke----------
 http://localhost:5000/bill/bydate/statdate/endate
 ví dụ
