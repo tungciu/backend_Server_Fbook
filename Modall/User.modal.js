@@ -187,7 +187,7 @@ Users.check_login = function (data, result) {
                         } else {
                             // Gửi OTP qua SMS
                             sendOTP(Users[0].Phone, otp);
-
+                            console.log("OPT LÀ:" +otp)
                             // So sánh mật khẩu (đã được băm)
                             const hashedPasswordFromDB = Users[0].PassWord;
                             result(Users[0]);
