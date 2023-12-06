@@ -83,13 +83,15 @@ router.post("/login_admin", Admincontroler.login);
 //verifyOTP
 // Trong file router.js hoặc tương tự
 router.post('/verify_otp', function (req, res, next) {
-    const userData = req.body;
+    const data  = req.body;
 
-    Usernmodal.verifyOTP(userData, function (isVerified) {
-        if (isVerified) {
-            res.json({ message: 'Xác nhận OTP thành công' });
+    Usernmodal.verifyOTP(data, function (result) {
+        if (result) {
+            // Xác nhận OTP thành công, trả về thông tin người dùng và token
+            res.send({ result: " Xác nhận OTP thành công"});
         } else {
-            res.status(400).json({ message: 'Xác nhận OTP thất bại' });
+            // Xác nhận OTP thất bại
+            res.send({ result: 'Xác nhận OTP thất bại' });
         }
     });
 });

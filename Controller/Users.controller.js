@@ -46,26 +46,26 @@ exports.add_Users = function (req, res) {
         }
     });
 }
+
 exports.login = function (req, res) {
     var data = req.body;
-    Users.chekc_login(data, async function (user) {
+    Users.check_login(data, async function (user) {
         if (user) {
             // So sánh mật khẩu đã nhập với mật khẩu đã mã hóa trong cơ sở dữ liệu
             bcrypt.compare(data.PassWord, user.PassWord, async function (err, result) {
                 if (result) {
-                    // Mật khẩu chính xác, tạo token và gửi về client cùng với thông tin người dùng
+                    // Mật khẩu chính xác, trả về thông tin người dùng và yêu cầu nhập OTP
                     const userInfo = {
                         IDUser: user.IDUser,
                         UserName: user.UserName,
-
-                        Email:user.Email,
-                       Birthday:user.Birthday,
-                       Phone:user.Phone,
-                        // thêm các thông tin khác bạn muốn gửi về
+                        Email: user.Email,
+                        Birthday: user.Birthday,
+                        Phone: user.Phone,
+                        // Thêm các thông tin khác bạn muốn gửi về
                     };
-
                     const _token = await JWT.make(userInfo);
-                    res.send({ result: { token: _token, user: userInfo }, status: true });
+                    res.send({ result: { token: _token, user: userInfo,message: 'Vui lòng nhập OTP để đăng nhập' }, status: true });
+                    // res.send({ result: { user: userInfo, message: 'Vui lòng nhập OTP để đăng nhập' } });
                 } else {
                     // Mật khẩu không chính xác
                     res.send({ result: "Mật khẩu không chính xác", status: false });
@@ -77,3 +77,36 @@ exports.login = function (req, res) {
         }
     });
 };
+// làm very otp tại đay
+
+// exports.login = function (req, res) {
+//     var data = req.body;
+//     Users.chekc_login(data, async function (user) {
+//         if (user) {
+//             // So sánh mật khẩu đã nhập với mật khẩu đã mã hóa trong cơ sở dữ liệu
+//             bcrypt.compare(data.PassWord, user.PassWord, async function (err, result) {
+//                 if (result) {
+//                     // Mật khẩu chính xác, tạo token và gửi về client cùng với thông tin người dùng
+//                     const userInfo = {
+//                         IDUser: user.IDUser,
+//                         UserName: user.UserName,
+//
+//                         Email:user.Email,
+//                        Birthday:user.Birthday,
+//                        Phone:user.Phone,
+//                         // thêm các thông tin khác bạn muốn gửi về
+//                     };
+//
+//                     const _token = await JWT.make(userInfo);
+//                     res.send({ result: { token: _token, user: userInfo }, status: true });
+//                 } else {
+//                     // Mật khẩu không chính xác
+//                     res.send({ result: "Mật khẩu không chính xác", status: false });
+//                 }
+//             });
+//         } else {
+//             // Người dùng không tồn tại
+//             res.send({ result: "Người dùng không tồn tại", status: false });
+//         }
+//     });
+// };

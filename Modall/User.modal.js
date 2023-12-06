@@ -2,7 +2,7 @@ const db=require("../Connect/Conectdb");
 const bcrypt = require('bcrypt');
 const otpGenerator = require('otp-generator'); // Cài đặt bằng cách sử dụng: npm install otp-generator
 const twilio = require('twilio');
-
+var JWT = require("../Connect/_JWT");
 const Users=function(Users){
     this.IDUser=Users.IDUser;
     this.UserName=Users.UserName;
@@ -53,25 +53,25 @@ Users.remove = function (id, result) {
     });
 }
 
-// Users.create=function(data,result){
-//     // Hash mật khẩu trước khi thêm vào cơ sở dữ liệu
-//     bcrypt.hash(data.PassWord, 10, function (err, hashedPassword) {
-//         if (err) {
-//             result(null);
-//         } else {
-//             // Thay thế mật khẩu chưa mã hóa bằng mật khẩu đã được mã hóa
-//             data.PassWord = hashedPassword;
-//     db.query("INSERT INTO Users SET ?", data,function(err,Users){
-//         if(err){
-//             result(null);
-//         }
-//         else{
-//             result({IDUser: Users.insertId, ...data});
-//         }
-//     });
-//         }
-//     });
-// }
+Users.create=function(data,result){
+    // Hash mật khẩu trước khi thêm vào cơ sở dữ liệu
+    bcrypt.hash(data.PassWord, 10, function (err, hashedPassword) {
+        if (err) {
+            result(null);
+        } else {
+            // Thay thế mật khẩu chưa mã hóa bằng mật khẩu đã được mã hóa
+            data.PassWord = hashedPassword;
+    db.query("INSERT INTO Users SET ?", data,function(err,Users){
+        if(err){
+            result(null);
+        }
+        else{
+            result({IDUser: Users.insertId, ...data});
+        }
+    });
+        }
+    });
+}
 
 
 // Hàm sinh OTP
@@ -93,51 +93,45 @@ const sendOTP = (phone, otp) => {
     });
 };
 
-Users.create = function (data, result) {
-
-    bcrypt.hash(data.PassWord, 10, function (err, hashedPassword) {
-        if (err) {
-            console.error('Lỗi khi băm mật khẩu:', err);
-            result(null);
-        } else {
-            data.PassWord = hashedPassword;
-
-            // Sinh và lưu OTP vào cơ sở dữ liệu
-            const otp = generateOTP();
-            data.otp = otp;
-
-            console.log('Dữ liệu trước khi thêm vào cơ sở dữ liệu:', data);
-
-            db.query("INSERT INTO Users SET ?", data, function (err, Users) {
-                if (err) {
-                    console.error('Lỗi khi thêm người dùng vào cơ sở dữ liệu:', err);
-                    result(null);
-                } else {
-                    // Gửi OTP đến điện thoại người dùng
-                    sendOTP(data.Phone, otp)
-                        .then(() => {
-                            result({ IDUser: Users.insertId, ...data });
-                        })
-                        .catch((error) => {
-                            console.error('Lỗi khi gửi OTP:', error);
-                            result(null);
-                        });
-                }
-            });
-        }
-    });
-};
-
 // Hàm xác nhận OTP trong quá trình đăng ký
+// Users.verifyOTP = function (data, result) {
+//     db.query("SELECT * FROM Users WHERE Phone = ? AND otp = ?", [data.Phone, data.otp], function (err, Users) {
+//         if (err || Users.length === 0) {
+//             result(false); // Xác nhận OTP thất bại
+//         } else {
+//             // Xác nhận OTP thành công, tạo token
+//             const userInfo = {
+//                 IDUser: Users[0].IDUser,
+//                 UserName: Users[0].UserName,
+//                 Email: Users[0].Email,
+//                 Birthday: Users[0].Birthday,
+//                 Phone: Users[0].Phone,
+//                 // Thêm các thông tin khác bạn muốn gửi về
+//             };
+//
+//             // Tạo token
+//             JWT.make(userInfo)
+//                 .then(token => {
+//                     result({ user: userInfo, token: token }); // Trả về cả user và token
+//                 })
+//                 .catch(error => {
+//                     console.error('Lỗi khi tạo token:', error);
+//                     result(false);
+//                 });
+//         }
+//     });
+// };
+
 Users.verifyOTP = function (data, result) {
     db.query("SELECT * FROM Users WHERE Phone = ? AND otp = ?", [data.Phone, data.otp], function (err, Users) {
         if (err || Users.length === 0) {
             result(false); // Xác nhận OTP thất bại
         } else {
-            result(true); // Xác nhận OTP thành công
+            result(true ); // Xác nhận OTP thành công
         }
     });
 };
+
 Users.update=function(array,result){
     if (db.state === 'disconnected') {
         db.connect();
@@ -166,7 +160,7 @@ Users.search = function (keyword, result) {
         }
     });
 }
-Users.chekc_login = function (data, result) {
+Users.check_login = function (data, result) {
     if (db.state === 'disconnected') {
         db.connect();
     }
@@ -177,21 +171,60 @@ Users.chekc_login = function (data, result) {
         [data.Email],
         function (err, Users) {
             if (err) {
-                console.error('Error during login query:', err);
+                console.error('Lỗi trong quá trình truy vấn đăng nhập:', err);
                 result(null);
             } else {
                 if (Users.length === 0) {
                     // Không tìm thấy người dùng
                     result(null);
                 } else {
-                    // So sánh mật khẩu (đã được băm)
-                    const hashedPasswordFromDB = Users[0].PassWord;
-                    result(Users[0]);
+                    // Tạo và lưu trữ OTP mới
+                    const otp = generateOTP();
+                    db.query("UPDATE Users SET otp = ? WHERE Email = ?", [otp, data.Email], function (err) {
+                        if (err) {
+                            console.error('Lỗi khi cập nhật OTP:', err);
+                            result(null);
+                        } else {
+                            // Gửi OTP qua SMS
+                            sendOTP(Users[0].Phone, otp);
+
+                            // So sánh mật khẩu (đã được băm)
+                            const hashedPasswordFromDB = Users[0].PassWord;
+                            result(Users[0]);
+                        }
+                    });
                 }
             }
         }
     );
 };
+
+// Users.chekc_login = function (data, result) {
+//     if (db.state === 'disconnected') {
+//         db.connect();
+//     }
+//
+//     // Sử dụng prepared statement để tránh SQL injection
+//     db.query(
+//         "SELECT * FROM Users WHERE Email = ?",
+//         [data.Email],
+//         function (err, Users) {
+//             if (err) {
+//                 console.error('Error during login query:', err);
+//                 result(null);
+//             } else {
+//                 if (Users.length === 0) {
+//                     // Không tìm thấy người dùng
+//                     result(null);
+//                 } else {
+//                     // So sánh mật khẩu (đã được băm)
+//                     const hashedPasswordFromDB = Users[0].PassWord;
+//                     result(Users[0]);
+//                 }
+//             }
+//         }
+//     );
+// };
 //update theo sdt
 Users.update = function (array, result) {
     if (db.state === 'disconnected') {
