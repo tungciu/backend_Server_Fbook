@@ -70,6 +70,18 @@ Favorite.getByid = function (id, result) {
             }
         });
     };
-
+// id user
+Favorite.getByUserId = function (userId, result) {
+    if (db.state === 'disconnected') {
+        db.connect();
+    }
+    db.query("SELECT * FROM Favorite WHERE IDUser = ?", userId, function (err, Favorites) {
+        if (err) {
+            result(null);
+        } else {
+            result(Favorites);
+        }
+    });
+};
 
 module.exports=Favorite;

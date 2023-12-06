@@ -52,8 +52,7 @@ Users.remove = function (id, result) {
         }
     });
 }
-//
-//
+
 // Users.create=function(data,result){
 //     // Hash mật khẩu trước khi thêm vào cơ sở dữ liệu
 //     bcrypt.hash(data.PassWord, 10, function (err, hashedPassword) {
@@ -95,6 +94,7 @@ const sendOTP = (phone, otp) => {
 };
 
 Users.create = function (data, result) {
+
     bcrypt.hash(data.PassWord, 10, function (err, hashedPassword) {
         if (err) {
             console.error('Lỗi khi băm mật khẩu:', err);

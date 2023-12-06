@@ -82,29 +82,6 @@ Bill.search = function (keyword, result) {
     });
 };
 
-// Bill.search = function (keyword, result) {
-//     if (db.state === 'disconnected') {
-//         db.connect();
-//     }
-//
-//     const query = `
-//         SELECT * FROM Bill
-//         WHERE
-//             IDBook LIKE ? or
-//             status LIKE ? or
-//             PriceTotal LIKE ?;
-//     `;
-//
-//     const searchKeyword = `%${keyword}%`;
-//
-//     db.query(query, [searchKeyword, searchKeyword,searchKeyword], function (err, Bills) {
-//         if (err) {
-//             result(null);
-//         } else {
-//             result(Bills);
-//         }
-//     });
-// };
 Bill.create = function (data, result) {
     if (db.state === 'disconnected') {
         db.connect();
@@ -161,5 +138,7 @@ Bill.getTotalByMonth = function (year, month, result) {
     // Gọi hàm getTotalByDateRange để sử dụng lại logic thống kê theo ngày
     Bill.getTotalByDateRange(firstDayOfMonth, lastDayOfMonth, result);
 };
+
+
 
 module.exports=Bill;

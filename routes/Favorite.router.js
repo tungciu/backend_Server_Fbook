@@ -12,9 +12,20 @@ router.get('/get_list', function(req, res, next) {
 
 
 // Lấy một admin cụ thể bằng ID
-router.get('/get_list/:id', function(req, res, next) {
+router.get('/get_id/:id', function(req, res, next) {
     const id = req.params.id;
     Favoritemodal.getByid(id, function(result) {
+        if (result === null) {
+            res.status(404).send('Không tìm thấy Favorite');
+        } else {
+            res.json(result);
+        }
+    });
+});
+// Lấy một admin cụ thể bằng ID user
+router.get('/byiduser/:id', function(req, res, next) {
+    const id = req.params.id;
+    Favoritemodal.getByUserId(id, function(result) {
         if (result === null) {
             res.status(404).send('Không tìm thấy Favorite');
         } else {
