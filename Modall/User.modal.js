@@ -127,7 +127,16 @@ Users.verifyOTP = function (data, result) {
         if (err || Users.length === 0) {
             result(false); // Xác nhận OTP thất bại
         } else {
-            result(true ); // Xác nhận OTP thành công
+            const userInfo = {
+                IDUser: Users[0].IDUser,
+                UserName: Users[0].UserName,
+                Email: Users[0].Email,
+                Birthday: Users[0].Birthday,
+                Phone: Users[0].Phone,
+                // Thêm các thông tin khác bạn muốn gửi về
+            };
+            // result(true ); // Xác nhận OTP thành công
+            result({ user: userInfo, message:"Thanh cong" },true);
         }
     });
 };

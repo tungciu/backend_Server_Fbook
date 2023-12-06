@@ -88,7 +88,7 @@ router.post('/verify_otp', function (req, res, next) {
     Usernmodal.verifyOTP(data, function (result) {
         if (result) {
             // Xác nhận OTP thành công, trả về thông tin người dùng và token
-            res.send({ result: " Xác nhận OTP thành công"});
+            res.send({ result:result});
         } else {
             // Xác nhận OTP thất bại
             res.send({ result: 'Xác nhận OTP thất bại' });
