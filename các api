@@ -10,13 +10,15 @@ http://localhost:5000/Book/upload
 ----------------Users----------------
 http://localhost:5000/users/get_list
 http://localhost:5000/users/delete/id
-http://localhost:5000/users/add
 http://localhost:5000/book/search/id
 // update theo sdt
 http://localhost:5000/acount/update_phone/Phone
 //update theo id
 http://localhost:5000/users/update/id
-
+// chekc otp
+http://localhost:5000/acount/verify_otp
+// login
+http://localhost:5000/acount/login
 ----------------Admin----------------
 http://localhost:5000/admin/get_list
 http://localhost:5000/admin/update/id
