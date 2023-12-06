@@ -192,5 +192,39 @@ Users.chekc_login = function (data, result) {
         }
     );
 };
+//update theo sdt
+Users.update = function (array, result) {
+    if (db.state === 'disconnected') {
+        db.connect();
+    }
+
+    if (array.Phone) {
+        // Nếu có sự thay đổi trong số điện thoại, thì kiểm tra xem số điện thoại mới đã tồn tại chưa
+        db.query("SELECT * FROM Users WHERE Phone = ? AND IDUser != ?", [array.Phone, array.IDUser], function (err, existingUser) {
+            if (err) {
+                result(null);
+            } else if (existingUser.length > 0) {
+                // Số điện thoại đã tồn tại cho một người dùng khác
+                result(null);
+            } else {
+                // Tiến hành cập nhật nếu số điện thoại hợp lệ
+                updateUser();
+            }
+        });
+    } else {
+        // Nếu không có thay đổi trong số điện thoại, tiến hành cập nhật ngay lập tức
+        updateUser();
+    }
+
+    function updateUser() {
+        db.query("UPDATE Users SET UserName=?, PassWord=?, Email=?, Birthday=?, Phone=? WHERE IDUser=?", [array.UserName, array.PassWord, array.Email, array.Birthday, array.Phone, array.IDUser], function (err, Admin) {
+            if (err) {
+                result(null);
+            } else {
+                result(array);
+            }
+        });
+    }
+};
 
 module.exports = Users;

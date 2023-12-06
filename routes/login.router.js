@@ -5,7 +5,7 @@ const Usernmodal = require("../Modall/User.modal");
 var Admincontroler = require("../Controller/Admin.controller");
 const Adminmodal = require("../Modall/Admin.modal");
 var JWT = require("../Connect/_JWT");
-
+const bcrypt = require('bcrypt');
 
 router.post("/login", UsersController.login);
 
@@ -38,7 +38,44 @@ router.post('/add', function (req, res, next) {
     });
 });
 
-// admin
+router.put('/update/:id', async function(req, res, next) {
+    const id = req.params.id;
+    const data = req.body;
+
+    // Mã hóa mật khẩu nếu có sự thay đổi
+    if (data.PassWord) {
+        const hashedPassword = await bcrypt.hash(data.PassWord, 10);
+        data.PassWord = hashedPassword;
+    }
+
+    Usernmodal.update({ ...data, IDUser: id }, function(result) {
+        if (result === null) {
+            res.status(404).send('Không tìm thấy User');
+        } else {
+            res.json(result);
+        }
+    });
+});
+// update theo sdt
+router.put('/update_phone/:phone', async function(req, res, next) {
+    const phone = req.params.phone;
+    const data = req.body;
+
+    // Mã hóa mật khẩu nếu có sự thay đổi
+    if (data.PassWord) {
+        const hashedPassword = await bcrypt.hash(data.PassWord, 10);
+        data.PassWord = hashedPassword;
+    }
+
+    Usernmodal.update({ ...data, Phone: phone }, function(result) {
+        if (result === null) {
+            res.status(404).send('Không tìm thấy User');
+        } else {
+            res.json(result);
+        }
+    });
+});
+
 
 
 

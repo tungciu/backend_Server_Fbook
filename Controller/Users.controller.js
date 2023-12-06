@@ -46,7 +46,6 @@ exports.add_Users = function (req, res) {
         }
     });
 }
-
 exports.login = function (req, res) {
     var data = req.body;
     Users.chekc_login(data, async function (user) {
@@ -54,17 +53,27 @@ exports.login = function (req, res) {
             // So sánh mật khẩu đã nhập với mật khẩu đã mã hóa trong cơ sở dữ liệu
             bcrypt.compare(data.PassWord, user.PassWord, async function (err, result) {
                 if (result) {
-                    // Mật khẩu chính xác, tạo token và gửi về client
-                    const _token = await JWT.make(user);
-                    res.send({ result: _token, status: true });
+                    // Mật khẩu chính xác, tạo token và gửi về client cùng với thông tin người dùng
+                    const userInfo = {
+                        IDUser: user.IDUser,
+                        UserName: user.UserName,
+
+                        Email:user.Email,
+                       Birthday:user.Birthday,
+                       Phone:user.Phone,
+                        // thêm các thông tin khác bạn muốn gửi về
+                    };
+
+                    const _token = await JWT.make(userInfo);
+                    res.send({ result: { token: _token, user: userInfo }, status: true });
                 } else {
                     // Mật khẩu không chính xác
-                    res.send({ result: "mk k chinh xac", status: false });
+                    res.send({ result: "Mật khẩu không chính xác", status: false });
                 }
             });
         } else {
             // Người dùng không tồn tại
-            res.send({ result: "không tồn tại", status: false });
+            res.send({ result: "Người dùng không tồn tại", status: false });
         }
     });
 };

@@ -29,7 +29,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 // các router
 app.use('/acount', AcountRouter);
-// app.use(_Authermiddalwera.isAuth);// check token
+app.use(_Authermiddalwera.isAuth);// check token
 app.use('/Category', Category);
 app.use('/users', usersRouter);
 app.use('/admin',AdminRouter);
