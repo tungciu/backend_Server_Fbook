@@ -71,17 +71,53 @@ Favorite.getByid = function (id, result) {
         });
     };
 // id user
+// Favorite.getByUserId = function (userId, result) {
+//     if (db.state === 'disconnected') {
+//         db.connect();
+//     }
+//     db.query("SELECT * FROM Favorite WHERE IDUser = ?", userId, function (err, Favorites) {
+//         if (err) {
+//             result(null);
+//         } else {
+//             result(Favorites);
+//         }
+//     });
+// };
 Favorite.getByUserId = function (userId, result) {
     if (db.state === 'disconnected') {
         db.connect();
     }
-    db.query("SELECT * FROM Favorite WHERE IDUser = ?", userId, function (err, Favorites) {
-        if (err) {
-            result(null);
-        } else {
-            result(Favorites);
+    db.query(
+        "SELECT Favorite.IDFavorite, Favorite.IDUser, Book.* FROM Favorite JOIN Book ON Favorite.IDBook = Book.IDBook WHERE Favorite.IDUser = ?",
+        userId,
+        function (err, Favorites) {
+            if (err) {
+                result(null);
+            } else {
+                // Chuyển đổi dữ liệu trước khi trả về
+                const formattedFavorites = Favorites.map(favorite => {
+                    return {
+                        "IDFavorite": favorite.IDFavorite,
+                        "IDUser": favorite.IDUser,
+                        "Book": {
+                            "IDBook": favorite.IDBook,
+                            "BookName": favorite.BookName,
+                            "Author": favorite.Author,
+                            "PublishYear": favorite.PublishYear,
+                            "PriceBook": favorite.PriceBook,
+                            "Discription": favorite.Discription,
+                            "ImageBook": favorite.ImageBook,
+                            "Create_at": favorite.Create_at,
+                            "Chapter": favorite.Chapter,
+                            "IDCat": favorite.IDCat,
+                            "isFavourite": favorite.isFavourite
+                        }
+                    };
+                });
+                result(formattedFavorites);
+            }
         }
-    });
+    );
 };
 
 module.exports=Favorite;
