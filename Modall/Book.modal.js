@@ -10,7 +10,7 @@ const Book = function (Book) {
     this.ImageBook = Book.ImageBook;
     this.Create_at = Book.Create_at;
     this.Chapter = Book.Chapter;
-    this.isFavourite=Book.isFavourite;
+
     this.IDCat = Book.IDCat;
 
 
@@ -94,7 +94,7 @@ Book.update = function (array, result) {
         db.connect();
     }
     db.query(
-        "UPDATE Book SET BookName=?,Author=?,PublishYear=?,PriceBook=?,Discription=?,ImageBook=?,IDCat=?,Chapter=?,Create_at=? ,isFavourite=? WHERE IDBook=?",
+        "UPDATE Book SET BookName=?,Author=?,PublishYear=?,PriceBook=?,Discription=?,ImageBook=?,IDCat=?,Chapter=?,Create_at=?  WHERE IDBook=?",
         [
             array.BookName,
             array.Author,
@@ -105,7 +105,7 @@ Book.update = function (array, result) {
             array.IDCat,
             array.Chapter,
             array.Create_at,  // Hãy đảm bảo rằng đây là timestamp hoặc datetime hợp lệ
-            array.isFavourite,
+
             array.IDBook,
         ],
         function (err, updateResult) {

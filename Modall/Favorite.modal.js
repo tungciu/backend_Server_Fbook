@@ -110,7 +110,7 @@ Favorite.getByUserId = function (userId, result) {
                         Create_at: fav.Create_at,
                         Chapter: fav.Chapter,
                         IDCat: fav.IDCat,
-                        isFavourite: fav.isFavourite
+
                     };
                 });
 
