@@ -35,9 +35,21 @@ router.get('/byiduser/:id', function(req, res, next) {
 });
 
 // Xóa một admin theo ID
-router.delete('/delete/:id', function(req, res, next) {
+// router.delete('/delete/:id', function(req, res, next) {
+//     const id = req.params.id;
+//     Favoritemodal.remove(id, function(result) {
+//         if (result === null) {
+//             res.status(404).send('Không tìm thấy Favorite');
+//         } else {
+//             res.send(result);
+//         }
+//     });
+// });
+router.delete('/delete/:id/:userId', function(req, res, next) {
     const id = req.params.id;
-    Favoritemodal.remove(id, function(result) {
+    const userId = req.params.userId;
+
+    Favoritemodal.remove(id, userId, function(result) {
         if (result === null) {
             res.status(404).send('Không tìm thấy Favorite');
         } else {
@@ -70,5 +82,6 @@ router.put('/update/:id', function(req, res, next) {
         }
     });
 });
+// xóa theo id user
 
 module.exports = router;

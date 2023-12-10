@@ -15,8 +15,7 @@ var BillRouter = require('./routes/Bill.router');
 var AcountRouter = require('./routes/login.router');
 var FavoriteRouter = require('./routes/Favorite.router');
 var app = express();
-// app.use('/uploads', express.static('public/uploads'));
-// view engine setup
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 // Cấu hình cors

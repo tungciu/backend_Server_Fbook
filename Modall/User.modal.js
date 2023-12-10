@@ -80,10 +80,10 @@ const generateOTP = () => {
 };
 // Hàm gửi OTP qua SMS sử dụng Twilio
 const sendOTP = (phone, otp) => {
-    const accountSid = 'AC57808ac8b6514d5523761d451df13af4';
-    const authToken = '583137acf688002a4bc776d46bcc0e83';
-    const twilioPhone = "+12625814573";  // Thay thế bằng số điện thoại Twilio đã xác nhận của bạn
-
+    const accountSid = 'AC4738c6e718bcf1ec6e95d4a65c911066';
+    const authToken = 'b3d51ac8f103fdf3cc4386ae6d70dff1';
+    const twilioPhone = "+12013451008";  // Thay thế bằng số điện thoại Twilio đã xác nhận của bạn
+    // 12625814573
     const client = new twilio(accountSid, authToken);
 
     return client.messages.create({
@@ -92,35 +92,6 @@ const sendOTP = (phone, otp) => {
         to: phone
     });
 };
-
-// Hàm xác nhận OTP trong quá trình đăng ký
-// Users.verifyOTP = function (data, result) {
-//     db.query("SELECT * FROM Users WHERE Phone = ? AND otp = ?", [data.Phone, data.otp], function (err, Users) {
-//         if (err || Users.length === 0) {
-//             result(false); // Xác nhận OTP thất bại
-//         } else {
-//             // Xác nhận OTP thành công, tạo token
-//             const userInfo = {
-//                 IDUser: Users[0].IDUser,
-//                 UserName: Users[0].UserName,
-//                 Email: Users[0].Email,
-//                 Birthday: Users[0].Birthday,
-//                 Phone: Users[0].Phone,
-//                 // Thêm các thông tin khác bạn muốn gửi về
-//             };
-//
-//             // Tạo token
-//             JWT.make(userInfo)
-//                 .then(token => {
-//                     result({ user: userInfo, token: token }); // Trả về cả user và token
-//                 })
-//                 .catch(error => {
-//                     console.error('Lỗi khi tạo token:', error);
-//                     result(false);
-//                 });
-//         }
-//     });
-// };
 
 Users.verifyOTP = function (data, result) {
     db.query("SELECT * FROM Users WHERE Phone = ? AND otp = ?", [data.Phone, data.otp], function (err, Users) {

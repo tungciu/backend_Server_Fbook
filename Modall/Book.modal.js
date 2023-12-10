@@ -10,7 +10,6 @@ const Book = function (Book) {
     this.ImageBook = Book.ImageBook;
     this.Create_at = Book.Create_at;
     this.Chapter = Book.Chapter;
-
     this.IDCat = Book.IDCat;
 
 
