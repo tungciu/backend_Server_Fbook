@@ -60,13 +60,23 @@ router.delete('/delete/:id/:userId', function(req, res, next) {
 
 
 // Tạo (thêm) một admin mới
+// router.post('/add', function(req, res, next) {
+//     const data = req.body; // Dữ liệu từ phần thân yêu cầu
+//     Favoritemodal.create(data, function(result) {
+//         if (result === null) {
+//             res.status(500).send('Lỗi máy chủ nội bộ');
+//         } else {
+//             res.json(result);
+//         }
+//     });
+// });
 router.post('/add', function(req, res, next) {
     const data = req.body; // Dữ liệu từ phần thân yêu cầu
     Favoritemodal.create(data, function(result) {
         if (result === null) {
-            res.status(500).send('Lỗi máy chủ nội bộ');
+            res.status(500).json({ Status: 'fail' }); // Trả về đối tượng JSON với trạng thái 'fail'
         } else {
-            res.json(result);
+            res.json({ Status: true, result: result }); // Trả về đối tượng JSON với trạng thái 'true' và dữ liệu kết quả
         }
     });
 });

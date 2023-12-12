@@ -88,11 +88,11 @@ Bill.create = function (data, result) {
     }
     db.query("INSERT INTO Bill SET ?", data, function (err, Bill) {
         if (err) {
+            console.error("Error inserting into Bill table:", err);
             result(null);
         } else {
             result({ IDBill: Bill.insertId, ...data });
         }
-
     });
 };
 
