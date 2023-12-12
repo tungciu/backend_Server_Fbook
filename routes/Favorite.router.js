@@ -34,17 +34,7 @@ router.get('/byiduser/:id', function(req, res, next) {
     });
 });
 
-// Xóa một admin theo ID
-// router.delete('/delete/:id', function(req, res, next) {
-//     const id = req.params.id;
-//     Favoritemodal.remove(id, function(result) {
-//         if (result === null) {
-//             res.status(404).send('Không tìm thấy Favorite');
-//         } else {
-//             res.send(result);
-//         }
-//     });
-// });
+
 router.delete('/delete/:id/:userId', function(req, res, next) {
     const id = req.params.id;
     const userId = req.params.userId;
@@ -58,18 +48,6 @@ router.delete('/delete/:id/:userId', function(req, res, next) {
     });
 });
 
-
-// Tạo (thêm) một admin mới
-// router.post('/add', function(req, res, next) {
-//     const data = req.body; // Dữ liệu từ phần thân yêu cầu
-//     Favoritemodal.create(data, function(result) {
-//         if (result === null) {
-//             res.status(500).send('Lỗi máy chủ nội bộ');
-//         } else {
-//             res.json(result);
-//         }
-//     });
-// });
 router.post('/add', function(req, res, next) {
     const data = req.body; // Dữ liệu từ phần thân yêu cầu
     Favoritemodal.create(data, function(result) {
