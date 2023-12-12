@@ -69,5 +69,24 @@ Category.remove = function (id, result) {
     );
 };
 
+// Trong phương thức checkUsage của đối tượng Category
+Category.checkUsage = function (idCat, result) {
+    if (db.state === 'disconnected') {
+        db.connect();
+    }
 
+    // Kiểm tra xem danh mục có được sử dụng trong bảng Book không
+    const bookQuery = `SELECT COUNT(*) AS bookCount FROM Book WHERE IDCat = ${db.escape(idCat)}`;
+    db.query(bookQuery, function (err, bookResult) {
+        if (err) {
+            console.error("Lỗi khi kiểm tra trong bảng Book:", err);
+            result(null);
+        } else {
+            // Trả về kết quả kiểm tra
+            result({
+                isUsedInBook: bookResult[0].bookCount > 0,
+            });
+        }
+    });
+};
 module.exports=Category;

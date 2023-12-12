@@ -5,6 +5,7 @@ var Category = require("../Modall/Category.modal");
 
 var  Categorycontroler=require("../Controller/Category.controler")
 
+
 // Sử dụng multer để xử lý tải lên ảnh
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -62,6 +63,24 @@ router.post('/add', function(req, res, next) {
   });
 });
 router.put("/update",Categorycontroler.update_Category);
-router.delete("/delete/:id",Categorycontroler.remove_Category)
+// router.delete("/delete/:id",Categorycontroler.remove_Category)
+router.delete('/delete/:id', function(req, res, next) {
+  const id = req.params.id;
+  Category.remove(id, function(result) {
+    if (result === null) {
+      res.status(404).send('Không tìm thấy Cat');
+    } else {
+      res.send(result);
+    }
+  });
+});
+// Trong route
+router.get('/checkUsage/:id', async (req, res) => {
+  const categoryId = req.params.id; // Sửa thành req.params.id
+
+  Category.checkUsage(categoryId, (result) => {
+    res.json(result);
+  });
+});
 
 module.exports = router;

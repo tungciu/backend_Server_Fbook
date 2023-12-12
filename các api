@@ -75,5 +75,7 @@ http://localhost:5000/Favorite/add
 http://localhost:5000/Favorite/delete/id
 //
 http://localhost:5000/Favorite/byiduser/991
+
+http://localhost:5000/Favorite/delete/5/991
 //
 
