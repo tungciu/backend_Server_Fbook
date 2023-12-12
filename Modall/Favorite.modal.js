@@ -43,15 +43,32 @@ Favorite.getByid = function (id, result) {
     //         }
     //     });
     // }
+// Favorite.remove = function (id, userId, result) {
+//     if (db.state === 'disconnected') {
+//         db.connect();
+//     }
+//     db.query("DELETE FROM Favorite WHERE IDFavorite = ? AND IDUser = ?", [id, userId], function (err, Favorite) {
+//         if (err) {
+//             result(null);
+//         } else {
+//             result("XOA THANH CONG IDFavorite CO ID " + id + " CUA USER CO ID " + userId);
+//         }
+//     });
+// }
 Favorite.remove = function (id, userId, result) {
     if (db.state === 'disconnected') {
         db.connect();
     }
+
     db.query("DELETE FROM Favorite WHERE IDFavorite = ? AND IDUser = ?", [id, userId], function (err, Favorite) {
         if (err) {
-            result(null);
+            result({ Status: 'fail' }); // Trả về đối tượng JSON với trạng thái 'fail'
         } else {
-            result("XOA THANH CONG IDFavorite CO ID " + id + " CUA USER CO ID " + userId);
+            if (Favorite.affectedRows > 0) {
+                result({ Status: true }); // Trả về đối tượng JSON với trạng thái 'true' nếu có dòng bị ảnh hưởng
+            } else {
+                result({ Status: 'fail' }); // Trả về đối tượng JSON với trạng thái 'fail' nếu không có dòng nào bị ảnh hưởng (không có dữ liệu được xóa)
+            }
         }
     });
 }

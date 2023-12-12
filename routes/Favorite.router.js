@@ -58,6 +58,7 @@ router.delete('/delete/:id/:userId', function(req, res, next) {
     });
 });
 
+
 // Tạo (thêm) một admin mới
 router.post('/add', function(req, res, next) {
     const data = req.body; // Dữ liệu từ phần thân yêu cầu
