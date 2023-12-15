@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var Billnmodal = require("../Modall/Bill.modal");
-var momoPayment = require('../Connect/momo-payment')
+
+
 
 // Lấy tất cả admins
 router.get('/get_list', function(req, res, next) {
@@ -35,54 +36,35 @@ router.delete('/delete/:id', function(req, res, next) {
     });
 });
 
-// Tạo (thêm) một admin mới
+// Tạo (thêm)
+// router.post('/add', function(req, res, next) {
+//     const data = req.body; // Dữ liệu từ phần thân yêu cầu
+//     Billnmodal.create(data, function(result) {
+//         if (result === null) {
+//             res.status(500).json({ Status: 'fail' }); // Trả về đối tượng JSON với trạng thái 'fail'
+//         } else {
+//             res.json({ Status: true, result: result }); // Trả về đối tượng JSON với trạng thái 'true' và dữ liệu kết quả
+//         }
+//     });
+// });
 router.post('/add', function(req, res, next) {
-    const data = req.body; // Dữ liệu từ phần thân yêu cầu
-    Billnmodal.create(data, function(result) {
+    const data = req.body;
+    Billnmodal.create(data, async function(result) {
         if (result === null) {
-            res.status(500).json({ Status: 'fail' }); // Trả về đối tượng JSON với trạng thái 'fail'
+            res.status(500).json({ Status: 'fail' });
         } else {
-            res.json({ Status: true, result: result }); // Trả về đối tượng JSON với trạng thái 'true' và dữ liệu kết quả
+            // Tạo URL thanh toán và chuyển hướng người dùng đến trang thanh toán
+            await result.createPaymentUrl(data, function(paymentError, paymentData) {
+                if (paymentError === null) {
+                    res.json({ Status: true, result: result, paymentData: paymentData });
+                } else {
+                    res.status(500).json({ Status: 'fail', error: paymentError });
+                }
+            });
         }
     });
 });
 
-
-// router.post('/add-with-momo', async function (req, res, next) {
-//     try {
-//         const orderInfo = {
-//             orderId: 'your_order_id', // Thay đổi theo định dạng của ứng dụng bạn
-//             orderDescription: 'your_order_description', // Thay đổi theo định dạng của ứng dụng bạn
-//             amount: req.body.amount, // Lấy số tiền từ dữ liệu yêu cầu
-//         };
-//
-//         // Gọi hàm thanh toán Momo
-//         const paymentResult = await momoPayment.initiatePayment(orderInfo);
-//
-//         // Nếu thanh toán Momo thành công, thêm mới vào cơ sở dữ liệu
-//         if (paymentResult.errorCode === '0') {
-//             const data = {
-//                 ...req.body,
-//                 // Thêm các trường khác nếu cần
-//             };
-//
-//             // Gọi hàm thêm mới từ modal
-//             Billnmodal.create(data, function (result) {
-//                 if (result === null) {
-//                     res.status(500).send('Lỗi máy chủ nội bộ');
-//                 } else {
-//                     res.json({ paymentResult, newBill: result });
-//                 }
-//             });
-//         } else {
-//             // Xử lý khi thanh toán Momo không thành công
-//             res.status(400).json({ error: 'Thanh toán Momo không thành công', paymentResult });
-//         }
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).send('Lỗi Nội Bộ Server');
-//     }
-// });
 // Cập nhật (update) một admin hiện tại theo ID
 router.put('/update/:id', function(req, res, next) {
     const id = req.params.id;

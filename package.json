@@ -26,6 +26,7 @@
     "nodemailer": "^6.9.7",
     "otp-generator": "^4.0.1",
     "path": "^0.12.7",
-    "twilio": "^4.19.0"
+    "twilio": "^4.19.0",
+    "vnpay": "^0.5.2"
   }
 }

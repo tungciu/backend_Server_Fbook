@@ -179,32 +179,6 @@ Users.check_login = function (data, result) {
     );
 };
 
-// Users.chekc_login = function (data, result) {
-//     if (db.state === 'disconnected') {
-//         db.connect();
-//     }
-//
-//     // Sử dụng prepared statement để tránh SQL injection
-//     db.query(
-//         "SELECT * FROM Users WHERE Email = ?",
-//         [data.Email],
-//         function (err, Users) {
-//             if (err) {
-//                 console.error('Error during login query:', err);
-//                 result(null);
-//             } else {
-//                 if (Users.length === 0) {
-//                     // Không tìm thấy người dùng
-//                     result(null);
-//                 } else {
-//                     // So sánh mật khẩu (đã được băm)
-//                     const hashedPasswordFromDB = Users[0].PassWord;
-//                     result(Users[0]);
-//                 }
-//             }
-//         }
-//     );
-// };
 //update theo sdt
 Users.update = function (array, result) {
     if (db.state === 'disconnected') {
@@ -239,5 +213,55 @@ Users.update = function (array, result) {
         });
     }
 };
+// update info
+Users.updateUserInfo = function (array, result) {
+    if (db.state === 'disconnected') {
+        db.connect();
+    }
+
+    // Trước khi thực hiện cập nhật, kiểm tra xem người dùng có tồn tại không
+    db.query("SELECT * FROM Users WHERE IDUser=?", [array.IDUser], function (selectErr, selectResult) {
+        if (selectErr) {
+            result(null);
+        } else {
+            if (selectResult.length === 0) {
+                // Người dùng không tồn tại
+                result(null);
+            } else {
+                // Người dùng tồn tại, thực hiện cập nhật
+                db.query("UPDATE Users SET UserName=?, Birthday=? WHERE IDUser=?", [array.UserName, array.Birthday, array.IDUser], function (updateErr, updateResult) {
+                    if (updateErr) {
+                        result(null);
+                    } else {
+                        result(array);
+                    }
+                });
+            }
+        }
+    });
+};
+// forgotpas
+Users.changePassword = function (IDUser, newPassword, result) {
+    if (db.state === 'disconnected') {
+        db.connect();
+    }
+
+    bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(newPassword, salt, function (err, hash) {
+            if (err) {
+                result(err, null);
+            } else {
+                db.query("UPDATE Users SET PassWord = ? WHERE IDUser = ?", [hash, IDUser], function (err, res) {
+                    if (err) {
+                        result(err, null);
+                    } else {
+                        result(null, res);
+                    }
+                });
+            }
+        });
+    });
+};
+
 
 module.exports = Users;

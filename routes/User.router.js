@@ -74,7 +74,56 @@ router.get('/search/:keyword', function(req, res, next) {
     });
 });
 
-// api login
+// update info
+// router.put('/updateprofile/:id', function(req, res, next) {
+//     var userID = req.params.id;
+//     var newName = req.body.newName;
+//     var newBirthday = req.body.newBirthday;
+//
+//     Usernmodal.updateUserInfo(userID, newName, newBirthday, function(err, result) {
+//         if (err) {
+//             res.status(500).send({ error: "Error updating user info" });
+//         } else {
+//             res.send({ success: true, message: "User info updated successfully" });
+//         }
+//     });
+// });
 
+router.put('/updateprofile/:id', function(req, res, next) {
+    const id = req.params.id;
+    const data = req.body; // Dữ liệu từ phần thân yêu cầu
+    Usernmodal.updateUserInfo({ ...data, IDUser: id }, function(result) {
+        if (result === null) {
+            res.status(404).json({ status: false, message: 'Không tìm thấy User' });
+        } else {
+            res.json({ status: true, message: "User info updated successfully", result: result });
+        }
+    });
+});
+// dổi pas
+router.put('/change_password/:id', function(req, res, next) {
+    const id = req.params.id;
+    const newPassword = req.body.newPassword; // Mật khẩu mới từ phần thân yêu cầu
+
+    // Kiểm tra mật khẩu mới có được cung cấp hay không
+    if (!newPassword) {
+        res.status(400).json({ status: false, message: 'Vui lòng cung cấp mật khẩu mới' });
+        return;
+    }
+
+    // Thay đổi mật khẩu và cập nhật vào cơ sở dữ liệu
+    Usernmodal.changePassword(id, newPassword, function(err, result) {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ status: false, message: 'Lỗi máy chủ nội bộ' });
+        } else {
+            if (result.affectedRows === 0) {
+                res.status(404).json({ status: false, message: 'Không tìm thấy người dùng' });
+            } else {
+                res.json({ status: true, message: 'Đổi mật khẩu thành công' });
+            }
+        }
+    });
+});
 
 module.exports = router;
