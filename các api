@@ -80,4 +80,9 @@ http://localhost:5000/Favorite/byiduser/991
 
 http://localhost:5000/Favorite/delete/5/991
 //
+--------------api mybook--------------
+http://localhost:5000/bill/getbookpaid/idusser
+Vi DU:
+http://localhost:5000/bill/getbookpaid/911
+
 
