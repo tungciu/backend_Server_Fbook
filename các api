@@ -31,6 +31,11 @@ demo
             "IDUser": 1,
             "UserName": "Tùng đây",
             "Birthday": "2003-11-23"
+  // get theo id user
+  http://localhost:5000/user/get_list/id
+
+
+
 ----------------Admin----------------
 http://localhost:5000/admin/get_list
 http://localhost:5000/admin/update/id

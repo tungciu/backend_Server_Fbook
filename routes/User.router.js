@@ -3,7 +3,9 @@ var router = express.Router();
 var Usernmodal = require("../Modall/User.modal");
 const { query } = require('express');
 const { json } = require('express');
+const bcrypt = require('bcrypt');
 const { search } = require('../Modall/User.modal');
+const JWT = require("../Connect/_JWT");
 
 // Lấy tất cả admins
 router.get('/get_list', function(req, res, next) {
@@ -12,13 +14,12 @@ router.get('/get_list', function(req, res, next) {
     });
 });
 
-
 // Lấy một admin cụ thể bằng ID
 router.get('/get_list/:id', function(req, res, next) {
     const id = req.params.id;
     Usernmodal.getByid(id, function(result) {
         if (result === null) {
-            res.status(404).send('Không tìm thấy Usernmodal');
+            res.status(404).send('Không tìm thấy user');
         } else {
             res.json(result);
         }

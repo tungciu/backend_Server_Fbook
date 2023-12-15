@@ -3,6 +3,41 @@ var router = express.Router();
 var Billnmodal = require("../Modall/Bill.modal");
 
 
+// router.post('/add', function(req, res, next) {
+//     const data = req.body;
+//     Billnmodal.create(data, async function(result) {
+//         if (result === null) {
+//             res.status(500).json({ Status: 'fail' });
+//         } else {
+//             // Tạo URL thanh toán và chuyển hướng người dùng đến trang thanh toán
+//             await result.createPaymentUrl(data, function(paymentError, paymentData) {
+//                 if (paymentError === null) {
+//                     res.json({ Status: true, result: result, paymentData: paymentData });
+//                 } else {
+//                     res.status(500).json({ Status: 'fail', error: paymentError });
+//                 }
+//             });
+//         }
+//     });
+// });
+// Trong hàm router.post('/add')
+router.post('/add', function(req, res, next) {
+    const data = req.body;
+    Billnmodal.create(data, async function(result) {
+        if (result === null) {
+            res.status(500).json({ Status: 'fail' });
+        } else {
+            // Tạo URL thanh toán và chuyển hướng người dùng đến trang thanh toán
+            await result.createPaymentUrl(result, function(paymentError, paymentData) {
+                if (paymentError === null) {
+                    res.json({ Status: true, result: result, paymentData: paymentData });
+                } else {
+                    res.status(500).json({ Status: 'fail', error: paymentError });
+                }
+            });
+        }
+    });
+});
 
 // Lấy tất cả admins
 router.get('/get_list', function(req, res, next) {
@@ -47,23 +82,7 @@ router.delete('/delete/:id', function(req, res, next) {
 //         }
 //     });
 // });
-router.post('/add', function(req, res, next) {
-    const data = req.body;
-    Billnmodal.create(data, async function(result) {
-        if (result === null) {
-            res.status(500).json({ Status: 'fail' });
-        } else {
-            // Tạo URL thanh toán và chuyển hướng người dùng đến trang thanh toán
-            await result.createPaymentUrl(data, function(paymentError, paymentData) {
-                if (paymentError === null) {
-                    res.json({ Status: true, result: result, paymentData: paymentData });
-                } else {
-                    res.status(500).json({ Status: 'fail', error: paymentError });
-                }
-            });
-        }
-    });
-});
+
 
 // Cập nhật (update) một admin hiện tại theo ID
 router.put('/update/:id', function(req, res, next) {
