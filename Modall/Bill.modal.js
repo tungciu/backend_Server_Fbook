@@ -109,7 +109,7 @@ Bill.getTotalByDateRange = function (startDate, endDate, result) {
             COUNT(*) AS totalOrders
         FROM Bill
         WHERE
-            Status = 'Paid' AND
+            Status = 'Đã thanh toán' AND
             Create_at BETWEEN ? AND ?;
     `;
 
@@ -140,5 +140,25 @@ Bill.getTotalByMonth = function (year, month, result) {
 };
 
 
+Bill.getbookPaid = function (IDUser, result) {
+    if (db.state === 'disconnected') {
+        db.connect();
+    }
+
+    const query = `
+        SELECT Book.*, Bill.PriceTotal, Bill.Create_at
+        FROM Bill
+        INNER JOIN Book ON Bill.IDBook = Book.IDBook
+        WHERE Bill.IDUser = ? AND Bill.Status = 'Đã thanh toán';
+    `;
+
+    db.query(query, IDUser, function (err, paidBooks) {
+        if (err) {
+            result(null);
+        } else {
+            result(paidBooks);
+        }
+    });
+};
 
 module.exports=Bill;

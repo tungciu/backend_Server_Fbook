@@ -134,5 +134,16 @@ router.get('/bymonth/:year/:month', function(req, res, next) {
     });
 });
 
+// Thêm vào router
+router.get('/getbookpaid/:id', function(req, res, next) {
+    const id = req.params.id;
+    Billnmodal.getbookPaid(id, function(result) {
+        if (result === null) {
+            res.status(404).send('Không có sách nào được thanh toán cho người dùng có ID này');
+        } else {
+            res.json(result);
+        }
+    });
+});
 
 module.exports = router;
