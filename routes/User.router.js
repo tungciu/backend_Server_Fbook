@@ -75,20 +75,6 @@ router.get('/search/:keyword', function(req, res, next) {
     });
 });
 
-// update info
-// router.put('/updateprofile/:id', function(req, res, next) {
-//     var userID = req.params.id;
-//     var newName = req.body.newName;
-//     var newBirthday = req.body.newBirthday;
-//
-//     Usernmodal.updateUserInfo(userID, newName, newBirthday, function(err, result) {
-//         if (err) {
-//             res.status(500).send({ error: "Error updating user info" });
-//         } else {
-//             res.send({ success: true, message: "User info updated successfully" });
-//         }
-//     });
-// });
 
 router.put('/updateprofile/:id', function(req, res, next) {
     const id = req.params.id;
