@@ -8,12 +8,6 @@ import('dateformat').then((dateFormatModule) => {
 });
 const crypto = require("crypto");
 
-function sortObject(obj) {
-    return Object.keys(obj).sort().reduce((acc, key) => {
-        acc[key] = obj[key];
-        return acc;
-    }, {});
-}
 
 const Bill = function (Bill) {
     this.IDBill = Bill.IDBill;
@@ -24,6 +18,13 @@ const Bill = function (Bill) {
     this.Create_at = Bill.Create_at;
 };
 // thanh toan
+function sortObject(obj) {
+    return Object.keys(obj).sort().reduce((acc, key) => {
+        acc[key] = obj[key];
+        return acc;
+    }, {});
+}
+
 // Trong hàm Bill.prototype.createPaymentUrl
 Bill.prototype.createPaymentUrl = async function (data, callback) {
     const paymentUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
@@ -240,6 +241,28 @@ Bill.getbookPaid = function (IDUser, result) {
         }
     });
 };
-// vnpay
+//
+
+Bill.getPaidBillsByUserID = function (id, result) {
+    if (db.state === 'disconnected') {
+        db.connect();
+    }
+
+    const query = `
+        SELECT Bill.IDBill, Book.BookName, Bill.PriceTotal, Bill.Status, Bill.Create_at
+        FROM Bill
+        INNER JOIN Book ON Bill.IDBook = Book.IDBook
+        WHERE Bill.IDUser = ? AND Bill.Status = 'Đã thanh toán'
+    `;
+
+    db.query(query, [id], function (err, paidBills) {
+        if (err) {
+            result(null);
+        } else {
+            result(paidBills);
+        }
+    });
+};
+
 
 module.exports=Bill;

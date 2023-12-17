@@ -2,6 +2,19 @@ var express = require('express');
 var router = express.Router();
 var Billnmodal = require("../Modall/Bill.modal");
 
+router.get('/get_bill_iduser/:id', function(req, res, next) {
+    var userId = req.params.id;
+
+    Billnmodal.getPaidBillsByUserID(userId, function(data) {
+        res.send({ result: data });
+    });
+});
+
+router.get('/get_list', function(req, res, next) {
+    Billnmodal.get_all(function(data) {
+        res.send({ result: data });
+    });
+});
 
 // router.post('/add', function(req, res, next) {
 //     const data = req.body;
@@ -142,9 +155,13 @@ router.get('/getbookpaid/:id', function(req, res, next) {
         if (data === null) {
             res.status(404).send('Không có sách nào được thanh toán cho người dùng có ID này');
         } else {
+
             res.send({ result: data });
+
         }
     });
 });
+
+
 
 module.exports = router;
