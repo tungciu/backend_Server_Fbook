@@ -38,7 +38,7 @@ router.post('/add', function(req, res, next) {
     const data = req.body;
     Billnmodal.create(data, async function(result) {
         if (result === null) {
-            res.status(500).json({ Status: 'fail' });
+            res.status(500).json({ Status: 'Chỉ được mua 1 lần' });
         } else {
             // Tạo URL thanh toán và chuyển hướng người dùng đến trang thanh toán
             await result.createPaymentUrl(result, function(paymentError, paymentData) {
