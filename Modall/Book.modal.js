@@ -15,6 +15,26 @@ const Book = function (Book) {
 
 
 };
+Book.get_by_idloai = function (idloai, result) {
+    if (db.state === 'disconnected') {
+        db.connect();
+    }
+    const query = `
+        SELECT Book.*, Category.CatName
+        FROM Book
+        LEFT JOIN Category ON Book.IDCat = Category.IDCat
+        WHERE Book.IDCat = ?
+    `;
+
+    db.query(query, [idloai], function (err, booksWithCategories) {
+        if (err) {
+            result(null);
+        } else {
+            result(booksWithCategories);
+        }
+    });
+};
+
 Book.get_all = function (result) {
     if (db.state === 'disconnected') {
         db.connect();

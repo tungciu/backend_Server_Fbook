@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const multer = require('multer');
 var Books = require("../Modall/Book.modal");
+const Usernmodal = require("../Modall/User.modal");
 
 //
 // // Sử dụng multer để xử lý tải lên ảnh
@@ -37,6 +38,16 @@ router.post('/upload', upload.single('image'), async (req, res) => {
 router.get('/get_list', function(req, res, next) {
     Books.get_all(function(data) {
         res.send({ result: data });
+    });
+});
+router.get('/get_list/:id', function(req, res, next) {
+    const id = req.params.id;
+    Books.get_by_idloai(id, function(data) {
+        if (data === null) {
+            res.status(404).send('Không tìm thấy loai');
+        } else {
+            res.send({ result: data });
+        }
     });
 });
 

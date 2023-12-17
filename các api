@@ -6,7 +6,10 @@ http://localhost:5000/book/add
 http://localhost:5000/book/search/id
 // duong dan up load ảnh book
 http://localhost:5000/Book/upload
-
+// api lây list sách theo loại
+http://localhost:5000/book/get_list/idcat
+vd:
+http://localhost:5000/book/get_list/2
 ----------------Users----------------
 http://localhost:5000/users/get_list
 http://localhost:5000/users/delete/id
