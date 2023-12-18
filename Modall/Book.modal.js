@@ -140,29 +140,58 @@ Book.update = function (array, result) {
 };
 //
 
+// Book.search = function (keyword, result) {
+//     if (db.state === 'disconnected') {
+//         db.connect();
+//     }
+//
+//     const query = `
+//         SELECT * FROM Book
+//         WHERE
+//             BookName LIKE ? OR
+//             Author LIKE ? OR
+//             PublishYear LIKE ? OR
+//             IDCat LIKE ? OR
+//             PriceBook LIKE ?;
+//     `;
+//
+//     const searchKeyword = `%${keyword}%`;
+//
+//     db.query(query, [searchKeyword, searchKeyword, searchKeyword, searchKeyword, searchKeyword], function (err, Books) {
+//         if (err) {
+//             result(null);
+//         } else {
+//             result(Books);
+//         }
+//     });
+// };
+
 Book.search = function (keyword, result) {
     if (db.state === 'disconnected') {
         db.connect();
     }
 
     const query = `
-        SELECT * FROM Book
+        SELECT Book.*, Category.CatName
+        FROM Book
+        LEFT JOIN Category ON Book.IDCat = Category.IDCat
         WHERE 
-            BookName LIKE ? OR
-            Author LIKE ? OR
-            PublishYear LIKE ? OR
-            IDCat LIKE ? OR
-            PriceBook LIKE ?;
+            Book.BookName LIKE ? OR
+            Book.Author LIKE ? OR
+            Book.PublishYear LIKE ? OR
+            Category.CatName LIKE ? OR
+            Book.PriceBook LIKE ?;
     `;
 
     const searchKeyword = `%${keyword}%`;
 
-    db.query(query, [searchKeyword, searchKeyword, searchKeyword, searchKeyword, searchKeyword], function (err, Books) {
+    db.query(query, [searchKeyword, searchKeyword, searchKeyword, searchKeyword, searchKeyword], function (err, booksWithCategories) {
         if (err) {
             result(null);
         } else {
-            result(Books);
+            result(booksWithCategories);
         }
     });
 };
+
 module.exports = Book;
