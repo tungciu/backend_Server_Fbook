@@ -157,34 +157,6 @@ Book.update = function (array, result) {
 };
 
 
-//
-
-// Book.search = function (keyword, result) {
-//     if (db.state === 'disconnected') {
-//         db.connect();
-//     }
-//
-//     const query = `
-//         SELECT * FROM Book
-//         WHERE
-//             BookName LIKE ? OR
-//             Author LIKE ? OR
-//             PublishYear LIKE ? OR
-//             IDCat LIKE ? OR
-//             PriceBook LIKE ?;
-//     `;
-//
-//     const searchKeyword = `%${keyword}%`;
-//
-//     db.query(query, [searchKeyword, searchKeyword, searchKeyword, searchKeyword, searchKeyword], function (err, Books) {
-//         if (err) {
-//             result(null);
-//         } else {
-//             result(Books);
-//         }
-//     });
-// };
-
 Book.search = function (keyword, result) {
     if (db.state === 'disconnected') {
         db.connect();

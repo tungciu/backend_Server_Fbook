@@ -118,7 +118,7 @@ router.get('/search/:keyword', function(req, res, next) {
         if (result === null) {
             res.status(404).send('Không tìm thấy kết quả');
         } else {
-            res.json(result);
+            res.send({ result: result });
         }
     });
 });

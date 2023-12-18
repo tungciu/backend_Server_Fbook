@@ -17,6 +17,33 @@ const Bill = function (Bill) {
     this.IDBook = Bill.IDBook;
     this.Create_at = Bill.Create_at;
 };
+Bill.getTopSellingBooks = function (result) {
+    if (db.state === 'disconnected') {
+        db.connect();
+    }
+
+    const query = `
+        SELECT Book.IDBook, Book.BookName, Book.ImageBook, Book.PriceBook, COUNT(Bill.IDBook) AS TotalSold
+        FROM Bill
+        INNER JOIN Book ON Bill.IDBook = Book.IDBook
+        WHERE Bill.Status = 'Đã thanh toán'
+        GROUP BY Book.IDBook
+        ORDER BY TotalSold DESC
+        LIMIT 10;
+    `;
+
+    db.query(query, function (err, topSellingBooks) {
+        if (err) {
+            result(null);
+        } else {
+            console.log("Kết quả top sách bán chạy nhất:", topSellingBooks);
+
+            result(topSellingBooks);
+        }
+    });
+};
+
+
 // thanh toan
 function sortObject(obj) {
     return Object.keys(obj).sort().reduce((acc, key) => {

@@ -15,6 +15,14 @@ router.get('/get_list', function(req, res, next) {
         res.send({ result: data });
     });
 });
+// Thêm router mới để lấy top 10 sách bán chạy nhất
+router.get('/get_top_selling_books', function(req, res, next) {
+    Billnmodal.getTopSellingBooks(function(data) {
+        console.log("Kết quả top sách bán chạy nhất:", data);
+        res.send({ result: data });
+    });
+});
+
 
 // router.post('/add', function(req, res, next) {
 //     const data = req.body;
