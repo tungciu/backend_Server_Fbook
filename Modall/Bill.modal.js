@@ -26,7 +26,7 @@ Bill.getTopSellingBooks = function (result) {
         SELECT Book.IDBook, Book.BookName, Book.ImageBook, Book.PriceBook, COUNT(Bill.IDBook) AS TotalSold
         FROM Bill
         INNER JOIN Book ON Bill.IDBook = Book.IDBook
-        WHERE Bill.Status = 'Đã thanh toán'
+        WHERE Bill.Status = 'Đã Thanh Toán'
         GROUP BY Book.IDBook
         ORDER BY TotalSold DESC
         LIMIT 10;
@@ -217,7 +217,7 @@ Bill.getTotalByDateRange = function (startDate, endDate, result) {
             COUNT(*) AS totalOrders
         FROM Bill
         WHERE
-            Status = 'Đã thanh toán' AND
+            Status = 'Đã Thanh Toán' AND
             Create_at BETWEEN ? AND ?;
     `;
 
@@ -257,7 +257,7 @@ Bill.getbookPaid = function (IDUser, result) {
         SELECT Book.*, Bill.PriceTotal, Bill.Create_at
         FROM Bill
         INNER JOIN Book ON Bill.IDBook = Book.IDBook
-        WHERE Bill.IDUser = ? AND Bill.Status = 'Đã thanh toán';
+        WHERE Bill.IDUser = ? AND Bill.Status = 'Đã Thanh Toán';
     `;
 
     db.query(query, IDUser, function (err, paidBooks) {
