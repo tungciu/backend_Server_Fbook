@@ -55,7 +55,7 @@ Book.get_all = function (result) {
         }
     });
 };
-
+//
 // Book.get_all = function (result) {
 //     if (db.state === 'disconnected') {
 //         db.connect();

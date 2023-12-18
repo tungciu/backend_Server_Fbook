@@ -112,13 +112,23 @@ router.put('/update/:id', function(req, res, next) {
     });
 });
 // api tìm kiếm
-router.get('/search/:keyword', function(req, res, next) {
+router.get('/searchap/:keyword', function(req, res, next) {
     const keyword = req.params.keyword;
     Books.search(keyword, function(result) {
         if (result === null) {
             res.status(404).send('Không tìm thấy kết quả');
         } else {
             res.send({ result: result });
+        }
+    });
+});
+router.get('/search/:keyword', function(req, res, next) {
+    const keyword = req.params.keyword;
+    Books.search(keyword, function(result) {
+        if (result === null) {
+            res.status(404).send('Không tìm thấy kết quả');
+        } else {
+            res.json(result);
         }
     });
 });
