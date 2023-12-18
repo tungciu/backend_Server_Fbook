@@ -44,6 +44,7 @@ Book.get_all = function (result) {
         SELECT Book.*, Category.CatName
         FROM Book
         LEFT JOIN Category ON Book.IDCat = Category.IDCat
+        ORDER BY Book.Create_at DESC;  -- Thêm mệnh đề ORDER BY
     `;
 
     db.query(query, function (err, booksWithCategories) {
@@ -107,12 +108,14 @@ Book.create = function (data, result) {
         }
     });
 };
-
-
 Book.update = function (array, result) {
     if (db.state === 'disconnected') {
         db.connect();
     }
+
+    // Lấy thời gian hiện tại
+    const currentTime = new Date();
+
     db.query(
         "UPDATE Book SET BookName=?,Author=?,PublishYear=?,PriceBook=?,Discription=?,ImageBook=?,IDCat=?,Chapter=?,Create_at=? ,Content=? WHERE IDBook=?",
         [
@@ -124,7 +127,7 @@ Book.update = function (array, result) {
             array.ImageBook,
             array.IDCat,
             array.Chapter,
-            array.Create_at,  // Hãy đảm bảo rằng đây là timestamp hoặc datetime hợp lệ
+            currentTime,  // Thay thế Create_at bằng thời gian hiện tại
             array.Content,
             array.IDBook,
         ],
@@ -133,11 +136,27 @@ Book.update = function (array, result) {
                 console.error("Lỗi khi cập nhật Sách:", err);
                 result(null);
             } else {
-                result(array);
+                // Sau khi cập nhật, sắp xếp lại danh sách theo thứ tự giảm dần của thời gian tạo
+                const query = `
+                    SELECT Book.*, Category.CatName
+                    FROM Book
+                    LEFT JOIN Category ON Book.IDCat = Category.IDCat
+                    ORDER BY Book.Create_at DESC;
+                `;
+
+                db.query(query, function (err, booksWithCategories) {
+                    if (err) {
+                        result(null);
+                    } else {
+                        result(booksWithCategories);
+                    }
+                });
             }
         }
     );
 };
+
+
 //
 
 // Book.search = function (keyword, result) {
