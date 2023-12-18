@@ -105,7 +105,7 @@ Favorite.getByUserId = function (userId, result) {
     }
 
     db.query(
-        "SELECT Favorite.IDFavorite, Favorite.IDUser, Favorite.IDBook, Book.* FROM Favorite JOIN Book ON Favorite.IDBook = Book.IDBook WHERE Favorite.IDUser = ?",
+        "SELECT Favorite.IDFavorite, Favorite.IDUser, Favorite.IDBook, Book.*, Category.CatName FROM Favorite JOIN Book ON Favorite.IDBook = Book.IDBook JOIN Category ON Book.IDCat = Category.IDCat WHERE Favorite.IDUser = ?",
         userId,
         function (err, favorites) {
             if (err) {
@@ -126,7 +126,7 @@ Favorite.getByUserId = function (userId, result) {
                         Create_at: fav.Create_at,
                         Chapter: fav.Chapter,
                         IDCat: fav.IDCat,
-
+                        CatName: fav.CatName, // Thay thế IDCat bằng CatName
                     };
                 });
 
@@ -135,6 +135,7 @@ Favorite.getByUserId = function (userId, result) {
         }
     );
 };
+
 
 
 
