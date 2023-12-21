@@ -6,7 +6,49 @@ var Admincontroler = require("../Controller/Admin.controller");
 const Adminmodal = require("../Modall/Admin.modal");
 var JWT = require("../Connect/_JWT");
 const bcrypt = require('bcrypt');
+const multer = require("multer");
 
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+//updalod img
+router.post('/upload', upload.single('image'), async (req, res) => {
+    try {
+        const imageData = req.file.buffer;
+        const imageName = Date.now() + '_' + req.file.originalname;
+        const imagePath = 'public/uploads/' + imageName;
+        require('fs').writeFile(imagePath, imageData, (err) => {
+            if (err) {
+                console.error("Lỗi khi ghi ảnh:", err);
+                res.status(500).json({ error: "Lỗi máy chủ nội bộ" });
+            } else {
+            }
+        });
+
+        // Tiếp theo, bạn có thể lưu imagePath vào cơ sở dữ liệu tùy thuộc vào yêu cầu của bạn.
+
+        // Gửi đường dẫn ảnh trả về cho client
+        const imageUrl = '/uploads/' + imageName; // Đường dẫn ảnh trong public/uploads
+        res.status(200).json({ imageUrl: imageUrl });
+    } catch (error) {
+        console.error("Lỗi khi xử lý ảnh:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+router.post('/add', function(req, res, next) {
+    // Lấy dữ liệu từ request body
+    var newData = req.body;
+
+    Usernmodal.create(newData, function(result) {
+        if (result) {
+            image = req.body.image;
+            res.send({ result: result });
+
+        } else {
+            res.status(500).send({ error: "Error creating new Category." });
+        }
+    });
+});
 router.post("/login", UsersController.login);
 
 router.get("/check_token", async function (req, res) {
@@ -24,19 +66,19 @@ router.get("/check_token", async function (req, res) {
         res.send({ data: "Mã token không hợp lệ" });
     }
 });
-router.post('/add', function (req, res, next) {
-    const userData = req.body;
-    console.log('Dữ liệu người dùng từ yêu cầu:', userData);
-
-    Usernmodal.create(userData, function (result) {
-        if (result === null) {
-            console.error('Lỗi máy chủ nội bộ');
-            res.status(500).send('Lỗi máy chủ nội bộ');
-        } else {
-            res.json(result);
-        }
-    });
-});
+// router.post('/add', function (req, res, next) {
+//     const userData = req.body;
+//     console.log('Dữ liệu người dùng từ yêu cầu:', userData);
+//
+//     Usernmodal.create(userData, function (result) {
+//         if (result === null) {
+//             console.error('Lỗi máy chủ nội bộ');
+//             res.status(500).send('Lỗi máy chủ nội bộ');
+//         } else {
+//             res.json(result);
+//         }
+//     });
+// });
 
 router.put('/update/:id', async function(req, res, next) {
     const id = req.params.id;
