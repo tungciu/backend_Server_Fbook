@@ -113,6 +113,7 @@ Bill.get_all = function (result) {
         FROM Bill
         LEFT JOIN Book ON Bill.IDBook = Book.IDBook
         LEFT JOIN Users ON Bill.IDUser = Users.IDUser
+        ORDER BY Bill.Create_at DESC
     `;
 
     db.query(query, function (err, billlWithCategories) {

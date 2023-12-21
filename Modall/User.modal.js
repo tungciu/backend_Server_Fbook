@@ -11,13 +11,15 @@ const Users=function(Users){
     this.Birthday=Users.Birthday;
     this.Phone=Users.Phone;
     this.otp=Users.otp;
+    this.Create_at=Users.Create_at;
+    this.img = Users.img;
 }
 
-Users.get_all=function(result){
+Users.get_all = function (result) {
     if (db.state === 'disconnected') {
         db.connect();
     }
-    db.query("SELECT * FROM Users", function (err, Users) {
+    db.query("SELECT * FROM Users ORDER BY Create_at DESC", function (err, Users) {
         if (err) {
             result(null);
         } else {
@@ -103,6 +105,7 @@ Users.verifyOTP = function (data, result) {
                 UserName: Users[0].UserName,
                 Email: Users[0].Email,
                 Birthday: Users[0].Birthday,
+                Create_at:Users[0].Create_at,
                 Phone: Users[0].Phone,
                 // Thêm các thông tin khác bạn muốn gửi về
             };
@@ -116,7 +119,7 @@ Users.update=function(array,result){
     if (db.state === 'disconnected') {
         db.connect();
     }
-    db.query("UPDATE Users SET UserName=?,PassWord=?,Email=?,Birthday=?,Phone=? WHERE IDUser=?", [array.UserName,array.PassWord,array.Email,array.Birthday,array.Phone,array.IDUser],function(err,Admin){
+    db.query("UPDATE Users SET UserName=?,PassWord=?,Email=?,Birthday=?,Phone=?,Create_at=?,img=? WHERE IDUser=?", [array.UserName,array.PassWord,array.Email,array.Birthday,array.Phone,array.Create_at,array.img,array.IDUser],function(err,Admin){
         if(err){
             result(null);
         }
@@ -231,7 +234,7 @@ Users.update = function (array, result) {
     }
 
     function updateUser() {
-        db.query("UPDATE Users SET UserName=?, PassWord=?, Email=?, Birthday=?, Phone=? WHERE IDUser=?", [array.UserName, array.PassWord, array.Email, array.Birthday, array.Phone, array.IDUser], function (err, Admin) {
+        db.query("UPDATE Users SET UserName=?, PassWord=?, Email=?, Birthday=?, Phone=?, Create_at=?,img=? WHERE IDUser=?", [array.UserName, array.PassWord, array.Email, array.Birthday, array.Phone,array.Create_at,array.img, array.IDUser], function (err, Admin) {
             if (err) {
                 result(null);
             } else {
@@ -256,7 +259,7 @@ Users.updateUserInfo = function (array, result) {
                 result(null);
             } else {
                 // Người dùng tồn tại, thực hiện cập nhật
-                db.query("UPDATE Users SET UserName=?, Birthday=? WHERE IDUser=?", [array.UserName, array.Birthday, array.IDUser], function (updateErr, updateResult) {
+                db.query("UPDATE Users SET UserName=?, Birthday=?,img=? WHERE IDUser=?", [array.UserName, array.Birthday,array.img, array.IDUser], function (updateErr, updateResult) {
                     if (updateErr) {
                         result(null);
                     } else {
