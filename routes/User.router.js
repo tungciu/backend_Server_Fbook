@@ -158,4 +158,43 @@ router.put('/change_password/:id', function(req, res, next) {
     });
 });
 
+// đổi theo ohone
+// Ví dụ gọi hàm trong router
+router.put('/change_password_by_phone/:phone', function(req, res, next) {
+    const phone = req.params.phone;
+    const newPassword = req.body.newPassword;
+
+    Usernmodal.changePasswordByPhone(phone, newPassword, function(err, result) {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ status: false, message: 'Người dùng k tồn tại' });
+        } else {
+            if (result.message === "Mật khẩu đã được thay đổi thành công") {
+                res.json({ status: true, message: result.message });
+            } else {
+                res.status(404).json({ status: false, message: result.message });
+            }
+        }
+    });
+});
+
+// router.put('/change_password_by_phone/:phone', function(req, res, next) {
+//     const phone = req.params.phone;
+//     const newPassword = req.body.newPassword;
+//
+//     // Check if the user with the given phone number exists
+//     Usernmodal.changePasswordByPhone(phone, newPassword, function(err, result) {
+//         if (err) {
+//             console.error(err);
+//             res.status(500).json({ status: false, message: 'Lỗi máy chủ nội bộ' });
+//         } else {
+//             if (result.message) {
+//                 res.status(404).json({ status: false, message: result.message });
+//             } else {
+//                 res.json({ status: true, message: 'Đổi mật khẩu thành công' });
+//             }
+//         }
+//     });
+// });
+
 module.exports = router;

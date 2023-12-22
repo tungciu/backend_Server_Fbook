@@ -38,6 +38,13 @@ demo
   // get theo id user
   http://localhost:5000/user/get_list/id
 
+đổi mật khẩu theo phone
+http://localhost:5000/user/change_password_by_phone/phone
+ví dụ:
+http://localhost:5000/user/change_password_by_phone/12345678
+{
+      "newPassword": "123456"
+}
 
 
 ----------------Admin----------------

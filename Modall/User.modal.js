@@ -293,5 +293,43 @@ Users.changePassword = function (IDUser, newPassword, result) {
     });
 };
 
+// Dổi pas theo phoen
+// Users.changePasswordByPhone = function (phone, newPassword, result) {
+//     // Kiểm tra xem người dùng với số điện thoại đã cho có tồn tại không
+//     db.query("SELECT * FROM Users WHERE Phone = ?", [phone], function (err, users) {
+//         if (err || users.length === 0) {
+//             result({ message: "Người dùng không tồn tại" });
+//         } else {
+//             // Cập nhật mật khẩu trong cơ sở dữ liệu
+//             db.query("UPDATE Users SET PassWord = ? WHERE Phone = ?", [newPassword, phone], function (err, result) {
+//                 if (err) {
+//                     result({ message: "Lỗi khi cập nhật mật khẩu" });
+//                 } else {
+//                     result(null, { message: "Mật khẩu đã được thay đổi thành công" });
+//                 }
+//             });
+//         }
+//     });
+// }
+// Ví dụ đơn giản
+Users.changePasswordByPhone = function (phone, newPassword, result) {
+    if (db.state === 'disconnected') {
+        db.connect();
+    }
+    db.query("SELECT * FROM Users WHERE Phone = ?", [phone], function (err, users) {
+        if (err || users.length === 0) {
+            result({ message: "Người dùng không tồn tại" });
+        } else {
+            // ...
+            db.query("UPDATE Users SET PassWord = ? WHERE Phone = ?", [newPassword, phone], function (err, updateResult) {
+                if (err) {
+                    result({ message: "Lỗi khi cập nhật mật khẩu" });
+                } else {
+                    result(null, { message: "Mật khẩu đã được thay đổi thành công" });
+                }
+            });
+        }
+    });
+};
 
 module.exports = Users;
