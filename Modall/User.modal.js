@@ -320,12 +320,18 @@ Users.changePasswordByPhone = function (phone, newPassword, result) {
         if (err || users.length === 0) {
             result({ message: "Người dùng không tồn tại" });
         } else {
-            // ...
-            db.query("UPDATE Users SET PassWord = ? WHERE Phone = ?", [newPassword, phone], function (err, updateResult) {
+            // Mã hóa mật khẩu mới trước khi lưu vào cơ sở dữ liệu
+            bcrypt.hash(newPassword, 10, function (err, hashedPassword) {
                 if (err) {
-                    result({ message: "Lỗi khi cập nhật mật khẩu" });
+                    result({ message: "Lỗi khi mã hóa mật khẩu mới" });
                 } else {
-                    result(null, { message: "Mật khẩu đã được thay đổi thành công" });
+                    db.query("UPDATE Users SET PassWord = ? WHERE Phone = ?", [hashedPassword, phone], function (err, updateResult) {
+                        if (err) {
+                            result({ message: "Lỗi khi cập nhật mật khẩu" });
+                        } else {
+                            result(null, { message: "Mật khẩu đã được thay đổi thành công" });
+                        }
+                    });
                 }
             });
         }

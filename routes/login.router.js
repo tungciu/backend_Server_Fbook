@@ -45,10 +45,11 @@ router.post('/add', function(req, res, next) {
             res.send({ result: result });
 
         } else {
-            res.status(500).send({ error: "Error creating new Category." });
+            res.status(500).send({ error: "Mail hoạc sđt đã tồn tại" });
         }
     });
 });
+
 router.post("/login", UsersController.login);
 
 router.get("/check_token", async function (req, res) {
