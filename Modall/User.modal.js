@@ -270,48 +270,31 @@ Users.updateUserInfo = function (array, result) {
         }
     });
 };
-// forgotpas
-Users.changePassword = function (IDUser, newPassword, result) {
-    if (db.state === 'disconnected') {
-        db.connect();
-    }
-
-    bcrypt.genSalt(10, function (err, salt) {
-        bcrypt.hash(newPassword, salt, function (err, hash) {
-            if (err) {
-                result(err, null);
-            } else {
-                db.query("UPDATE Users SET PassWord = ? WHERE IDUser = ?", [hash, IDUser], function (err, res) {
-                    if (err) {
-                        result(err, null);
-                    } else {
-                        result(null, res);
-                    }
-                });
-            }
-        });
-    });
-};
+//
+// // forgotpas
+// Users.changePassword = function (IDUser, newPassword, result) {
+//     if (db.state === 'disconnected') {
+//         db.connect();
+//     }
+//
+//     bcrypt.genSalt(10, function (err, salt) {
+//         bcrypt.hash(newPassword, salt, function (err, hash) {
+//             if (err) {
+//                 result(err, null);
+//             } else {
+//                 db.query("UPDATE Users SET PassWord = ? WHERE IDUser = ?", [hash, IDUser], function (err, res) {
+//                     if (err) {
+//                         result(err, null);
+//                     } else {
+//                         result(null, res);
+//                     }
+//                 });
+//             }
+//         });
+//     });
+// };
 
 // Dổi pas theo phoen
-// Users.changePasswordByPhone = function (phone, newPassword, result) {
-//     // Kiểm tra xem người dùng với số điện thoại đã cho có tồn tại không
-//     db.query("SELECT * FROM Users WHERE Phone = ?", [phone], function (err, users) {
-//         if (err || users.length === 0) {
-//             result({ message: "Người dùng không tồn tại" });
-//         } else {
-//             // Cập nhật mật khẩu trong cơ sở dữ liệu
-//             db.query("UPDATE Users SET PassWord = ? WHERE Phone = ?", [newPassword, phone], function (err, result) {
-//                 if (err) {
-//                     result({ message: "Lỗi khi cập nhật mật khẩu" });
-//                 } else {
-//                     result(null, { message: "Mật khẩu đã được thay đổi thành công" });
-//                 }
-//             });
-//         }
-//     });
-// }
-// Ví dụ đơn giản
 Users.changePasswordByPhone = function (phone, newPassword, result) {
     if (db.state === 'disconnected') {
         db.connect();
@@ -334,6 +317,53 @@ Users.changePasswordByPhone = function (phone, newPassword, result) {
                     });
                 }
             });
+        }
+    });
+};
+// đổi pas theo pass hiện tại
+Users.changePassword = function (IDUser, currentPassword, newPassword, result) {
+    if (db.state === 'disconnected') {
+        db.connect();
+    }
+
+    // Bước 1: Kiểm tra mật khẩu hiện tại
+    db.query("SELECT PassWord FROM Users WHERE IDUser = ?", [IDUser], function (err, rows) {
+        if (err) {
+            result(err, null);
+        } else {
+            if (rows.length > 0) {
+                const hashedCurrentPassword = rows[0].PassWord;
+
+                // So sánh mật khẩu hiện tại với hash đã lưu trữ
+                bcrypt.compare(currentPassword, hashedCurrentPassword, function (err, isMatch) {
+                    if (err) {
+                        result(err, null);
+                    } else if (!isMatch) {
+                        // Mật khẩu hiện tại không đúng
+                        result("Mật khẩu hiện tại không đúng", null);
+                    } else {
+                        // Yêu cầu nhập mật khẩu mới chỉ khi mật khẩu hiện tại đúng
+                        bcrypt.genSalt(10, function (err, salt) {
+                            bcrypt.hash(newPassword, salt, function (err, hash) {
+                                if (err) {
+                                    result(err, null);
+                                } else {
+                                    db.query("UPDATE Users SET PassWord = ? WHERE IDUser = ?", [hash, IDUser], function (err, res) {
+                                        if (err) {
+                                            result(err, null);
+                                        } else {
+                                            result(null, res);
+                                        }
+                                    });
+                                }
+                            });
+                        });
+                    }
+                });
+            } else {
+                // Người dùng không tồn tại
+                result("Người dùng không tồn tại", null);
+            }
         }
     });
 };
