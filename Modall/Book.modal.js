@@ -10,7 +10,7 @@ const Book = function (Book) {
     this.ImageBook = Book.ImageBook;
     this.Create_at = Book.Create_at;
     this.Chapter = Book.Chapter;
-    this.Content=Book.Content;
+    this.status=Book.status;
     this.IDCat = Book.IDCat;
 
 
@@ -117,7 +117,7 @@ Book.update = function (array, result) {
     const currentTime = new Date();
 
     db.query(
-        "UPDATE Book SET BookName=?,Author=?,PublishYear=?,PriceBook=?,Discription=?,ImageBook=?,IDCat=?,Chapter=?,Create_at=? ,Content=? WHERE IDBook=?",
+        "UPDATE Book SET BookName=?,Author=?,PublishYear=?,PriceBook=?,Discription=?,ImageBook=?,IDCat=?,Chapter=?,Create_at=? ,status=? WHERE IDBook=?",
         [
             array.BookName,
             array.Author,
@@ -128,7 +128,7 @@ Book.update = function (array, result) {
             array.IDCat,
             array.Chapter,
             currentTime,  // Thay thế Create_at bằng thời gian hiện tại
-            array.Content,
+            array.status,
             array.IDBook,
         ],
         function (err, updateResult) {

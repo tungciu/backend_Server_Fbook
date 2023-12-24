@@ -64,7 +64,7 @@ Cart.update=function(array,result){
     if (db.state === 'disconnected') {
         db.connect();
     }
-    db.query("UPDATE Cart SET IDBook=?, IDUser=?, status=? WHERE IDCart=?", [array.IDBook,array.IDCart,array.IDUser,array.status],function(err,Cart){
+    db.query("UPDATE Cart SET IDBook=?, IDUser=?, status=? WHERE IDCart=?", [array.IDBook,array.IDCart,array.IDUser,array.status,],function(err,Cart){
         if(err){
             result(null);
         }
@@ -74,4 +74,3 @@ Cart.update=function(array,result){
         }
     });
 }
-module.exports=Cart;

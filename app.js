@@ -12,6 +12,7 @@ var UsersRouter = require('./routes/User.router');
 var BooksRouter = require('./routes/Book.router');
 var CartRouter = require('./routes/Cart.router');
 var BillRouter = require('./routes/Bill.router');
+var Chuungrouter = require('./routes/Chuong.router');
 var AcountRouter = require('./routes/login.router');
 var FavoriteRouter = require('./routes/Favorite.router');
 var app = express();
@@ -30,6 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/acount', AcountRouter);
 app.use(_Authermiddalwera.isAuth);// check token
 app.use('/Category', Category);
+
 app.use('/users', usersRouter);
 app.use('/admin',AdminRouter);
 app.use('/user',UsersRouter);
@@ -37,6 +39,7 @@ app.use('/book',BooksRouter);
 app.use('/cart',CartRouter);
 app.use('/bill',BillRouter);
 app.use('/Favorite',FavoriteRouter);
+app.use('/chuong', Chuungrouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
