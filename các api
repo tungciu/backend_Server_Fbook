@@ -121,3 +121,27 @@ Vi DU:
 http://localhost:5000/bill/getbookpaid/911
 
 
+-----------------API CHUONG-----------------
+// lâ chuowng theo id book
+http://localhost:5000/chuong/get_chapters_with_info/IDBook
+//demo và hiện tại mới thêm chương cho book có id 2 thui tí rảnh tui thêm nhiều chương
+http://localhost:5000/chuong/get_chapters_with_info/2
+
+ "result": [
+        {
+            "IDchuong": 2,
+            "IDBook": 2,
+            "chuongso": 2,
+            "title": "Chương 2: Oong gia di choi",
+            "content": "Tôi đã từng ước trên đời này có tồn tại hai chữ \"nếu như\" thì thật tốt biết bao. Nếu như ngày đó tôi không vào lớp học nọ thì có lẽ cũng sẽ không đơn độc như vậy. Nếu như không gặp người đó thì có lẽ... đã không có hai chữ \"sau này\". Trong đầu tôi vẫn luôn in dấu kí ức những năm tháng khi còn học trên mái trường trung học, là những tháng ngày đơn độc và tẻ nhạt nhất. Tôi chán ghét việc đi học ngồi trên lớp rồi bị bạn bè đem ra trêu đùa bắt nạt. Vì là một người yếu đuối nhút nhát nên tôi chỉ có thể làm trò tiêu khiển cho bạn bè trong lớp, thậm chí bị đánh cũng phải nhẫn. Tôi không đủ khả năng chống trả, cũng không thể chống trả. Cứ như vậy mà chịu đựng nhẫn nại và chờ đợi cho đến năm cuối cấp. Cũng là năm nay, bây giờ tôi chuẩn bị lên lớp 9",
+            "Create_at": "2023-12-24T09:22:47.000Z",
+            "BookName": "ÔNG GIÀ VÀ BIỂN CẢ",
+            "Author": "Ernest Hemingway",
+            "PublishYear": "1952"
+        }
+    ]
+
+    // api lấy toàn bo chuong
+    http://localhost:5000/chuong/get_list
+
+    // đã chỉnh phần status của sách rồi nha nếu sách miễn phí thì sẽ là 0đ và nguwokc lại
