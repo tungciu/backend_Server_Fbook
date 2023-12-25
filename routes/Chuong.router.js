@@ -10,14 +10,23 @@ router.get('/get_list', function(req, res, next) {
     });
 });
 
-// làm tại đây
-router.get('/get_chapters_with_info/:idBook', function(req, res, next) {
+// theo id book
+router.get('/get_chapters_idbook/:idBook', function(req, res, next) {
     const idBook = req.params.idBook;
 
     Chuongmodal.getChuongByIdBook(idBook, function(data) {
         res.send({ result: data });
     });
 });
+// theo id chuong
+router.get('/get_chapters_idchuong/:idChuong', function(req, res, next) {
+    const idChuong = req.params.idChuong;
+
+    Chuongmodal.getChuongByIdChuong(idChuong, function(data) {
+        res.send({ result: data });
+    });
+});
+
 router.post('/add', function(req, res, next) {
     // Lấy dữ liệu từ request body
     var newData = req.body;

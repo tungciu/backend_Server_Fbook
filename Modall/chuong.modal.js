@@ -47,6 +47,21 @@ Chuong.getChuongByIdBook = function (idBook, result) {
         }
     });
 }
+// theo id chuong
+Chuong.getChuongByIdChuong = function (idChuong, result) {
+    if (db.state === 'disconnected') {
+        db.connect();
+    }
+    // Sử dụng WHERE để lấy chỉ những chương có IDchuong tương ứng
+    db.query("SELECT Chuong.*, Book.BookName, Book.Author, Book.PublishYear FROM Chuong INNER JOIN Book ON Chuong.IDBook = Book.IDBook WHERE Chuong.IDchuong = ?", [idChuong], function (err, chuongInfo) {
+        if (err) {
+            console.error(err);
+            result(null);
+        } else {
+            result(chuongInfo);
+        }
+    });
+}
 
 //
 // Chuong.create=function(data,result){

@@ -122,10 +122,10 @@ http://localhost:5000/bill/getbookpaid/911
 
 
 -----------------API CHUONG-----------------
-// lâ chuowng theo id book
-http://localhost:5000/chuong/get_chapters_with_info/IDBook
+-----------------------chuowng theo id book-------------
+http://localhost:5000/chuong/get_chapters_idbook/IDBook
 //demo và hiện tại mới thêm chương cho book có id 2 thui tí rảnh tui thêm nhiều chương
-http://localhost:5000/chuong/get_chapters_with_info/2
+http://localhost:5000/chuong/get_chapters_idbook/2
 
  "result": [
         {
@@ -140,7 +140,9 @@ http://localhost:5000/chuong/get_chapters_with_info/2
             "PublishYear": "1952"
         }
     ]
-
+    -----------------lấy theo id chuong---------------
+    http://localhost:5000/chuong/get_chapters_idchuong/24
+dữ liệu demo như thì như id book ở trên
     // api lấy toàn bo chuong
     http://localhost:5000/chuong/get_list
 
