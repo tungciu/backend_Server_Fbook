@@ -15,6 +15,7 @@ var BillRouter = require('./routes/Bill.router');
 var Chuungrouter = require('./routes/Chuong.router');
 var AcountRouter = require('./routes/login.router');
 var FavoriteRouter = require('./routes/Favorite.router');
+var FeedBackRouter = require('./routes/FeedBack.router');
 var app = express();
 
 app.set('views', path.join(__dirname, 'views'));
@@ -40,6 +41,7 @@ app.use('/cart',CartRouter);
 app.use('/bill',BillRouter);
 app.use('/Favorite',FavoriteRouter);
 app.use('/chuong', Chuungrouter);
+app.use('/FeedBack',FeedBackRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

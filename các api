@@ -147,3 +147,38 @@ dữ liệu demo như thì như id book ở trên
     http://localhost:5000/chuong/get_list
 
     // đã chỉnh phần status của sách rồi nha nếu sách miễn phí thì sẽ là 0đ và nguwokc lại
+-------------------------Bảng FeedBack(coment và đánh gia)-----------------------
+// get all
+http://localhost:5000/FeedBack/get_list
+// api get theo idbook
+http://localhost:5000/FeedBack/get_idbook/3
+demo:
+{
+    "result": [
+        {
+            "IDFeedBack": 2,
+            "Rate": 3,
+            "Comment": "hay quá",
+            "IDUser": 134,
+            "IDBook": 3,
+            "Create_at": "2023-12-26T12:38:19.000Z",
+            "BookName": "THÉP ĐÃ TÔI THẾ ĐẤY",
+            "UserName": "linh203"
+        }
+    ]
+}
+// them mới
+http://localhost:5000/FeedBack/add
+demo:
+{
+            "Rate": 3,
+            "Comment": "hay quá",
+            "IDUser": 134,
+            "IDBook": 3
+}
+/ tìm kiếm theo tên sách,tên người dùng,số sao
+http://localhost:5000/FeedBack/search/keyword
+delete
+http://localhost:5000/FeedBack/delete/3
+// sao trung bihn theo idbook
+http://localhost:5000/FeedBack/average_rating/8
