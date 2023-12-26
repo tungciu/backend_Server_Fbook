@@ -75,13 +75,14 @@ router.delete('/delete/:id', function(req, res, next) {
 router.get('/average_rating/:idBook', function(req, res, next) {
     const bookId = req.params.idBook;
 
-    FeedBackmodal.averageRatingByBookId(bookId, function(averageRating,result) {
+    FeedBackmodal.averageRatingByBookId(bookId, function(averageRating, result) {
         if (averageRating !== null) {
-            res.send({ averageRating: averageRating, });
+            res.send({ success: true, averageRating: averageRating });
         } else {
-            res.status(500).send({ error: "Lỗi khi lấy trung bình đánh giá sao cho sách." });
+            res.status(500).send({ success: false, error: "sách này chưa có coment" });
         }
     });
 });
+
 
 module.exports=router;
