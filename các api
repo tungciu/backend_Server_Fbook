@@ -182,3 +182,38 @@ delete
 http://localhost:5000/FeedBack/delete/3
 // sao trung bihn theo idbook
 http://localhost:5000/FeedBack/average_rating/8
+
+------------------NOTIFYCATION------------------------
+// add
+http://localhost:5000/Noti/add
+demo:
+     "title": "Mua thành công sách +Bookname",
+            "IDUser": 134,
+            "IDBook": 9
+// get theo idusser
+http://localhost:5000/Noti/get_iduser/134
+demo:
+{
+    "result": [
+        {
+            "IDNoti": 2,
+            "title": "Mua thành công sách a",
+            "IDUser": 134,
+            "IDBook": 9,
+            "Create_at": "2024-01-01T17:00:00.000Z",
+            "BookName": "SAO NGHI CAN SỐ 1 LÀ ANH",
+            "UserName": "linh203"
+        },
+        {
+            "IDNoti": 3,
+            "title": "Mua thành công sách b",
+            "IDUser": 134,
+            "IDBook": 9,
+            "Create_at": "2024-01-01T17:00:00.000Z",
+            "BookName": "SAO NGHI CAN SỐ 1 LÀ ANH",
+            "UserName": "linh203"
+        }
+    ]
+}
+// getall
+http://localhost:5000/Noti/get_list
