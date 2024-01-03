@@ -1,10 +1,11 @@
 const db = require('../Connect/Conectdb');
-const NOTIFICATION = function (FeedBack) {
-    this.IDNoti = FeedBack.IDNoti;
-    this.title = FeedBack.title;
-    this.IDUser = FeedBack.IDUser;
-    this.IDBook = FeedBack.IDBook;
-    this.Create_at = FeedBack.Create_at;
+const NOTIFICATION = function (NOTIFICATION) {
+    this.IDNoti = NOTIFICATION.IDNoti;
+    this.title = NOTIFICATION.title;
+    this.Content=NOTIFICATION.Content;
+    this.IDUser = NOTIFICATION.IDUser;
+    this.IDBook = NOTIFICATION.IDBook;
+    this.Create_at = NOTIFICATION.Create_at;
 }
 
 
