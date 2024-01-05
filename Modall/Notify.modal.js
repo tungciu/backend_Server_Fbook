@@ -79,7 +79,7 @@ NOTIFICATION.remove = function (id, result) {
         if (err) {
             result(null);
         } else {
-            result("XOA THANH CONG fe CO ID " + id);
+            result("XOA THANH CONG Noty CO ID " + id);
         }
     });
 }

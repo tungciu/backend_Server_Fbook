@@ -130,10 +130,16 @@ FeedBack.averageRatingByBookId = function (bookId, result) {
             console.error("Lỗi khi tính trung bình đánh giá sách:", err);
             result(null);
         } else {
-            result(averageRating[0].AverageRating);
+            // Kiểm tra nếu giá trị trả về là null hoặc undefined, thì đặt là "0.0"
+            const formattedRating = (averageRating[0].AverageRating !== null && averageRating[0].AverageRating !== undefined)
+                ? parseFloat(averageRating[0].AverageRating).toFixed(1)
+                : "0.0";
 
+            result(formattedRating);
         }
     });
 };
+
+
 
 module.exports=FeedBack;

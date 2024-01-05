@@ -35,4 +35,16 @@ router.get('/get_iduser/:id', function(req, res, next) {
         }
     });
 });
+
+
+router.delete('/delete/:id', function(req, res, next) {
+    const id = req.params.id;
+    NotifyBackmodal.remove(id, function(result) {
+        if (result === null) {
+            res.status(404).send('Không tìm thấy Noty');
+        } else {
+            res.send(result);
+        }
+    });
+});
 module.exports=router;
