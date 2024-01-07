@@ -8,6 +8,21 @@ const NOTIFICATION = function (NOTIFICATION) {
     this.Create_at = NOTIFICATION.Create_at;
 }
 
+// NOTIFICATION.checkForNewNotification = async function () {
+//     return new Promise((resolve, reject) => {
+//         const query = "SELECT COUNT(*) AS count FROM NOTIFICATION WHERE IsRead = 0"; // Điều này cần được điều chỉnh phù hợp với cấu trúc của bạn
+//
+//         db.query(query, (err, result) => {
+//             if (err) {
+//                 console.error("Lỗi khi kiểm tra thông báo mới:", err);
+//                 reject(err);
+//             } else {
+//                 const count = result[0].count;
+//                 resolve(count > 0); // Nếu có thông báo mới, trả về true
+//             }
+//         });
+//     });
+// };
 
 NOTIFICATION.get_all = function (result) {
 

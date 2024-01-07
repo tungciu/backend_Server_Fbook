@@ -6,7 +6,7 @@ var pool = mysql.createPool({
     user: "freedb_tungcun",
     password: "a9YF7DQxy%j@y9P",
     database: "freedb_Fbook_server",
-    connectTimeout: 200000,
+    connectTimeout: 400000,
 });
 
 // Khi pool kết nối thành công

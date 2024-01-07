@@ -4,42 +4,49 @@ const Category = function (Category) {
     this.IDCat = Category.IDCat;
     this.CatName = Category.CatName;
     this.img = Category.img;
+    this.Create_at=Category.Create_at;
 };
 
 Category.get_all = function (result) {
     if (db.state === 'disconnected') {
         db.connect();
     }
-    db.query("SELECT * FROM Category", function (err, Category) {
+    db.query("SELECT * FROM Category ORDER BY Create_at DESC", function (err, Category) {
         if (err) {
             console.error("Lỗi khi lấy danh sách Category:", err);
             result(null);
         } else {
             result(Category);
         }
-
     });
 };
 Category.create = function (data, result) {
     if (db.state === 'disconnected') {
         db.connect();
     }
+
+    // Thêm trường Create_at vào data nếu không có
+    if (!data.Create_at) {
+        data.Create_at = new Date(); // Lấy thời điểm hiện tại
+    }
+
     db.query("INSERT INTO Category SET ?", data, function (err, Category) {
         if (err) {
+            console.error("Lỗi khi tạo Category:", err);
             result(null);
         } else {
             result({ IDCat: Category.insertId, ...data });
         }
-
     });
 };
+
 Category.update = function (array, result) {
     if (db.state === 'disconnected') {
         db.connect();
     }
     db.query(
-        "UPDATE Category SET CatName=?,img=? WHERE IDCat=?",
-        [array.CatName, array.img, array.IDCat],
+        "UPDATE Category SET CatName=?,img=?,Create_at=? WHERE IDCat=?",
+        [array.CatName, array.img,array.Create_at, array.IDCat],
         function (err, Category) {
             if (err) {
                 result(null);
