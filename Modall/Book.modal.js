@@ -171,12 +171,13 @@ Book.search = function (keyword, result) {
             Book.Author LIKE ? OR
             Book.PublishYear LIKE ? OR
             Category.CatName LIKE ? OR
-            Book.PriceBook LIKE ?;
+            Book.PriceBook LIKE ? OR
+            Book.status LIKE ?;
     `;
 
     const searchKeyword = `%${keyword}%`;
 
-    db.query(query, [searchKeyword, searchKeyword, searchKeyword, searchKeyword, searchKeyword], function (err, booksWithCategories) {
+    db.query(query, [searchKeyword, searchKeyword, searchKeyword, searchKeyword, searchKeyword, searchKeyword], function (err, booksWithCategories) {
         if (err) {
             result(null);
         } else {
@@ -184,5 +185,6 @@ Book.search = function (keyword, result) {
         }
     });
 };
+
 
 module.exports = Book;

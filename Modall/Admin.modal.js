@@ -107,4 +107,53 @@ Admin.chekc_login = function (data, result) {
         }
     );
 };
+// đổi mật khẩu theo email hoặc sđt
+Admin.changePassword = function (identifier, newPassword, result) {
+    if (db.state === 'disconnected') {
+        db.connect();
+    }
+
+    const condition = identifier.includes('@') ? 'Email' : 'Phone';
+
+    // Tìm admin dựa trên email hoặc số điện thoại
+    db.query(
+        `SELECT * FROM Admin WHERE ${condition} = ?`,
+        [identifier],
+        function (err, Admins) {
+            if (err) {
+                console.error('Error during change password query:', err);
+                result({ success: false, message: 'Thông báo lỗi chi tiết', error: err });
+
+                // result({ success: false });
+            } else {
+                if (Admins.length === 0) {
+                    // Không tìm thấy admin với email hoặc số điện thoại cung cấp
+                    result({ success: false });
+                } else {
+                    const adminID = Admins[0].IDAdmin;
+
+                    // Hash mật khẩu mới
+                    bcrypt.hash(newPassword, 10, function (err, hashedPassword) {
+                        if (err) {
+                            result({ success: false });
+                        } else {
+                            // Cập nhật mật khẩu mới vào cơ sở dữ liệu
+                            db.query(
+                                "UPDATE Admin SET PassWord = ? WHERE IDAdmin = ?",
+                                [hashedPassword, adminID],
+                                function (err, updatedAdmin) {
+                                    if (err) {
+                                        result({ success: false });
+                                    } else {
+                                        result({ success: true });
+                                    }
+                                }
+                            );
+                        }
+                    });
+                }
+            }
+        }
+    );
+};
 module.exports=Admin;

@@ -43,17 +43,6 @@ router.post('/add', function(req, res, next) {
     });
 });
 
-//
-// router.post('/add', function(req, res, next) {
-//     const data = req.body; // Dữ liệu từ phần thân yêu cầu
-//     Chuongmodal.create(data, function(result) {
-//         if (result === null) {
-//             res.status(500).send('Lỗi máy chủ nội bộ');
-//         } else {
-//             res.json(result);
-//         }
-//     });
-// });
 router.put('/update/:id', function(req, res, next) {
     const id = req.params.id;
     const data = req.body; // Dữ liệu từ phần thân yêu cầu
@@ -78,4 +67,13 @@ router.delete('/delete/:id', function(req, res, next) {
         }
     });
 });
+// tìm kiếm theo book ở đây
+router.get('/search_by_bookname/:bookName', function(req, res, next) {
+    const bookName = req.params.bookName;
+
+    Chuongmodal.searchByBookName(bookName, function(data) {
+        res.send({ result: data });
+    });
+});
+
 module.exports=router;

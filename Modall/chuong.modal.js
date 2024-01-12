@@ -63,20 +63,7 @@ Chuong.getChuongByIdChuong = function (idChuong, result) {
     });
 }
 
-//
-// Chuong.create=function(data,result){
-//     if (db.state === 'disconnected') {
-//         db.connect();
-//     }
-//         db.query("INSERT INTO Chuong SET ?", data,function(err,Chuong){
-//         if(err){
-//             result(null);
-//         }
-//         else{
-//             result({IDchuong: Chuong.insertId, ...data});
-//         }
-//     });
-// }
+
 Chuong.create = function (data, result) {
     if (db.state === 'disconnected') {
         db.connect();
@@ -116,17 +103,28 @@ Chuong.remove = function (id, result) {
         }
     });
 }
-// Chuong.get_all = function (result) {
-//     if (db.state === 'disconnected') {
-//         db.connect();
-//     }
-//     // Sử dụng INNER JOIN để kết hợp thông tin từ cả hai bảng
-//     db.query("SELECT Chuong.*, Book.BookName FROM Chuong INNER JOIN Book ON Chuong.IDBook = Book.IDBook", function (err, Cart) {
-//         if (err) {
-//             result(null);
-//         } else {
-//             result(Cart);
-//         }
-//     });
-// }
+// api tìm kiếm theo sách ở đây
+Chuong.searchByBookName = function (bookName, result) {
+    if (db.state === 'disconnected') {
+        db.connect();
+    }
+
+    const query = `
+        SELECT Chuong.*, Book.BookName
+        FROM Chuong
+        LEFT JOIN Book ON Chuong.IDBook = Book.IDBook
+        WHERE Book.BookName LIKE ?
+        ORDER BY Chuong.Create_at DESC;
+    `;
+
+    db.query(query, [`%${bookName}%`], function (err, ChuongwithBookname) {
+        if (err) {
+            console.error(err);
+            result(null);
+        } else {
+            result(ChuongwithBookname);
+        }
+    });
+}
+
 module.exports = Chuong;

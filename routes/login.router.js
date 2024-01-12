@@ -123,6 +123,23 @@ router.put('/update_phone/:phone', async function(req, res, next) {
 
 
 router.post("/login_admin", Admincontroler.login);
+// đổi mạt khẩu tại đây
+router.put('/change_password', async function(req, res, next) {
+    const identifier = req.body.identifier; // Email hoặc số điện thoại
+    const newPassword = req.body.newPassword;
+
+    // Gọi hàm để thực hiện đổi mật khẩu
+    Adminmodal.changePassword(identifier, newPassword, function(result) {
+        if (result && result.success) {
+            res.json({ success: true, message: 'Đổi mật khẩu thành công!' });
+        } else {
+            res.status(400).json({ success: false, message: 'Đổi mật khẩu thất bại. Kiểm tra thông tin nhập vào.' });
+
+        }
+    });
+});
+
+
 //verifyOTP
 // Trong file router.js hoặc tương tự
 router.post('/verify_otp', function (req, res, next) {
