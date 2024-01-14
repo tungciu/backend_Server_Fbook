@@ -18,7 +18,7 @@ router.post('/add', function(req, res, next) {
         if (result) {
             res.send({ result: result });
         } else {
-            res.status(500).send({ error: "Lôi them fe" });
+            res.status(500).send({ error: "Chi được Đánh giá 1 lần" });
         }
     });
 });
